@@ -13,6 +13,7 @@ public class EnemySpawner : MonoBehaviour
     public GameObject button;
     public GameObject enemy;
     public SpawnPoint[] SpawnPoints;    
+    private Dictionary<string, Enemy> enemy_types = new Dictionary<string, Enemy>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,6 +22,7 @@ public class EnemySpawner : MonoBehaviour
         selector.transform.localPosition = new Vector3(0, 130);
         selector.GetComponent<MenuSelectorController>().spawner = this;
         selector.GetComponent<MenuSelectorController>().SetLevel("Start");
+        LoadEnemies();
     }
 
     // Update is called once per frame
@@ -76,4 +78,25 @@ public class EnemySpawner : MonoBehaviour
         GameManager.Instance.AddEnemy(new_enemy);
         yield return new WaitForSeconds(0.5f);
     }
+
+    // https://yawgmoth.github.io/CMPM121/slides/lecture4.html#15 :3c
+    public void LoadEnemies()
+    {
+        var enemytext = Resources.Load<TextAsset>("enemies");
+        JToken jo = JToken.Parse(enemytext.text);
+        foreach (var enemy in jo)
+        {
+            Enemy en = enemy.ToObject<Enemy>();
+            enemy_types[en.name] = en;
+        }
+    }
+}
+
+public class Enemy
+{
+    public string name;
+    public int sprite;
+    public int hp;
+    public int speed;
+    public int damage;
 }
