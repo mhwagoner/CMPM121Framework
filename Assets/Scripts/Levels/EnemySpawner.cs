@@ -23,6 +23,7 @@ public class EnemySpawner : MonoBehaviour
         selector.GetComponent<MenuSelectorController>().spawner = this;
         selector.GetComponent<MenuSelectorController>().SetLevel("Start");
         LoadEnemies();
+        LoadLevels();
     }
 
     // Update is called once per frame
@@ -90,13 +91,14 @@ public class EnemySpawner : MonoBehaviour
             enemy_types[en.name] = en;
         }
     }
-}
 
-public class Enemy
-{
-    public string name;
-    public int sprite;
-    public int hp;
-    public int speed;
-    public int damage;
+    public void LoadLevels()
+    {
+        var leveltext = Resources.Load<TextAsset>("levels");
+        JToken jo = JToken.Parse(leveltext.text);
+        foreach (var level in jo)
+        {
+            Level lvl = level.ToObject<Level>();
+        }
+    }
 }
