@@ -14,6 +14,8 @@ public class EnemySpawner : MonoBehaviour
     public GameObject enemy;
     public SpawnPoint[] SpawnPoints;    
     private Dictionary<string, Enemy> enemy_types = new Dictionary<string, Enemy>();
+    public int currentwave = 1;
+    public int currentcount;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -40,14 +42,19 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine(SpawnWave());
     }
 
-    public void NextWave()
+    public void NextWave()      // should keep track of what wave we are on
     {
+        currentwave += 1;
+        // if (currentwave > selectedLevel.waves)  // waiting for buttons to be done
+        // {
+        //     //stop running the game
+        // }
         StartCoroutine(SpawnWave());
     }
 
 
-    IEnumerator SpawnWave()
-    {
+    IEnumerator SpawnWave()     // needs to spawn each type of enemy in the levels spawn list
+    {                           // and should spawn the sequence with delay found in spawn class
         GameManager.Instance.state = GameManager.GameState.COUNTDOWN;
         GameManager.Instance.countdown = 3;
         for (int i = 3; i > 0; i--)
@@ -58,13 +65,27 @@ public class EnemySpawner : MonoBehaviour
         GameManager.Instance.state = GameManager.GameState.INWAVE;
         for (int i = 0; i < 10; ++i)
         {
-            yield return SpawnZombie();
+            yield return SpawnEnemy();
         }
+
+        // foreach (var enemy_type in selectedLevel.spawns)
+        // {
+        //     currentcount = 0;
+        //     while (currentcount <= enemy_type.count) // need to RPNcalculator the count first
+        //     {
+        //         yield return new WaitForSeconds(enemy_type.delay);
+        //         for (int i = 0; i < enemy_type.sequence; i++)  // figure out better way to do the sequence spawning
+        //         {                                              // and to make sure it spawns not over the count limit
+        //             yield return SpawnEnemy();
+        //         }
+        //     }
+        // }
+
         yield return new WaitWhile(() => GameManager.Instance.enemy_count > 0);
         GameManager.Instance.state = GameManager.GameState.WAVEEND;
     }
 
-    IEnumerator SpawnZombie()
+    IEnumerator SpawnEnemy()
     {
         SpawnPoint spawn_point = SpawnPoints[Random.Range(0, SpawnPoints.Length)];
         Vector2 offset = Random.insideUnitCircle * 1.8f;
