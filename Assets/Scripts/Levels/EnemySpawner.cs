@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
+using System.Diagnostics;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -26,12 +27,13 @@ public class EnemySpawner : MonoBehaviour
         LoadLevels();
 
         //instantiate unique button for each level type
-        foreach (var (key, value) in level_types)
+        foreach (var lvl in level_types)
         {
-            GameObject selector = Instantiate(button, level_selector.transform);
-            selector.transform.localPosition = new Vector3(0, 130);
-            selector.GetComponent<MenuSelectorController>().spawner = this;
-            //selector.GetComponent<MenuSelectorController>().SetLevel(lvl);
+            UnityEngine.Debug.Log(lvl.Key);
+            GameObject level_button = Instantiate(button, level_selector.transform);
+            level_button.transform.localPosition = new Vector3(0, 130);
+            level_button.GetComponent<MenuSelectorController>().spawner = this;
+            level_button.GetComponent<MenuSelectorController>().SetLevel(lvl.Key);
         }
     }
 
