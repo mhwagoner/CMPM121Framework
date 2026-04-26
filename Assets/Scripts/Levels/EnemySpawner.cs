@@ -14,16 +14,23 @@ public class EnemySpawner : MonoBehaviour
     public GameObject enemy;
     public SpawnPoint[] SpawnPoints;    
     private Dictionary<string, Enemy> enemy_types = new Dictionary<string, Enemy>();
+    private Dictionary<string, Level> level_types = new Dictionary<string, Level>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GameObject selector = Instantiate(button, level_selector.transform);
-        selector.transform.localPosition = new Vector3(0, 130);
-        selector.GetComponent<MenuSelectorController>().spawner = this;
-        selector.GetComponent<MenuSelectorController>().SetLevel("Start");
+        //parsing enemy and level types from JSON and putting them in dictionaries
         LoadEnemies();
         LoadLevels();
+
+        //instantiate unique button for each level type
+        foreach (var (key, value) in level_types)
+        {
+            GameObject selector = Instantiate(button, level_selector.transform);
+            selector.transform.localPosition = new Vector3(0, 130);
+            selector.GetComponent<MenuSelectorController>().spawner = this;
+            //selector.GetComponent<MenuSelectorController>().SetLevel(lvl);
+        }
     }
 
     // Update is called once per frame
@@ -99,6 +106,7 @@ public class EnemySpawner : MonoBehaviour
         foreach (var level in jo)
         {
             Level lvl = level.ToObject<Level>();
+            level_types[lvl.name] = lvl;
         }
     }
 }
