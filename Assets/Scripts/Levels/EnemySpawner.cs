@@ -43,7 +43,7 @@ public class EnemySpawner : MonoBehaviour
         
     }
 
-    public void StartLevel(string levelname)
+    public void StartLevel(string levelname) //level name needs to be used somewhere to determine enemies and waves
     {
         level_selector.gameObject.SetActive(false);
         // this is not nice: we should not have to be required to tell the player directly that the level is starting

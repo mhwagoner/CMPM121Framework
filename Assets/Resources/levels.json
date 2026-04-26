@@ -80,5 +80,33 @@
                 "location": "random bone"
             }
         ]
+   },
+   {
+        "name": "Super Duper Wacko Hard Mode",
+        "waves": 20,
+        "spawns": [
+            {
+                "enemy": "zombie",
+                "count": "50 wave 2 * +",
+                "hp": "25 wave *",
+                "delay": "5",
+                "sequence": [20,30,40],
+                "location": "random"
+            },
+            {
+                "enemy": "skeleton",
+                "count": "wave 2 *",
+                "hp": "25 wave *",
+                "sequence": [20, 20],
+                "location": "random red"
+            },
+            {
+                "enemy": "warlock",
+                "count": "wave 5 / 1 wave 5 % - *",
+                "hp": "75 50 wave * +",
+                "damage": "base 10 +",
+                "location": "random bone"
+            }
+        ]
    }
 ]
