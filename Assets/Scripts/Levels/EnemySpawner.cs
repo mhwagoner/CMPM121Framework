@@ -92,7 +92,7 @@ public class EnemySpawner : MonoBehaviour
         {                                                   // I think it's one at a time, which is not what we want
             currentcount = 0;
             spawn_var["base"] = enemy_types[enemy_type.enemy].hp;
-            count = RPNEvaluator.Evaluate(enemy_type.count, spawn_var); // not sure why it can't find it
+            count = RPNEvaluator.RPNEvaluator.Evaluate(enemy_type.count, spawn_var);
             while (true)                                    // the loop that spawns the total count of each enemy
             {
                 foreach (int n in enemy_type.sequence)
