@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
 using System.Diagnostics;
+using RPNEvaluator;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -15,9 +16,16 @@ public class EnemySpawner : MonoBehaviour
     public GameObject enemy;
     public SpawnPoint[] SpawnPoints;    
     private Dictionary<string, Enemy> enemy_types = new Dictionary<string, Enemy>();
-    public int currentwave = 1;
-    public int currentcount;
     private Dictionary<string, Level> level_types = new Dictionary<string, Level>();
+    private Dictionary<string, int> spawn_var = new Dictionary<string, int>
+    { 
+        { "base", 0 }, 
+        { "wave", 0 } 
+    };
+    private Level selectedLevel;
+    private int currentwave = 1;
+    private int currentcount;
+    private int count;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -45,6 +53,8 @@ public class EnemySpawner : MonoBehaviour
 
     public void StartLevel(string levelname) //level name needs to be used somewhere to determine enemies and waves
     {
+        selectedLevel = level_types[levelname];
+
         level_selector.gameObject.SetActive(false);
         // this is not nice: we should not have to be required to tell the player directly that the level is starting
         GameManager.Instance.player.GetComponent<PlayerController>().StartLevel();
@@ -54,10 +64,11 @@ public class EnemySpawner : MonoBehaviour
     public void NextWave()      // should keep track of what wave we are on
     {
         currentwave += 1;
-        // if (currentwave > selectedLevel.waves)  // waiting for buttons to be done
-        // {
-        //     //stop running the game
-        // }
+        spawn_var["wave"] = currentwave;
+        if (currentwave > selectedLevel.waves)
+        {
+            //stop running the game
+        }
         StartCoroutine(SpawnWave());
     }
 
@@ -72,23 +83,34 @@ public class EnemySpawner : MonoBehaviour
             GameManager.Instance.countdown--;
         }
         GameManager.Instance.state = GameManager.GameState.INWAVE;
-        for (int i = 0; i < 10; ++i)
-        {
-            yield return SpawnEnemy();
-        }
-
-        // foreach (var enemy_type in selectedLevel.spawns)
+        // for (int i = 0; i < 10; ++i)
         // {
-        //     currentcount = 0;
-        //     while (currentcount <= enemy_type.count) // need to RPNcalculator the count first
-        //     {
-        //         yield return new WaitForSeconds(enemy_type.delay);
-        //         for (int i = 0; i < enemy_type.sequence; i++)  // figure out better way to do the sequence spawning
-        //         {                                              // and to make sure it spawns not over the count limit
-        //             yield return SpawnEnemy();
-        //         }
-        //     }
+        //     yield return SpawnEnemy();
         // }
+
+        foreach (var enemy_type in selectedLevel.spawns)    // not sure if this means all the enemy types spawn at the same time or one at a time
+        {                                                   // I think it's one at a time, which is not what we want
+            currentcount = 0;
+            spawn_var["base"] = enemy_types[enemy_type.enemy].hp;
+            count = RPNEvaluator.Evaluate(enemy_type.count, spawn_var); // not sure why it can't find it
+            while (true)                                    // the loop that spawns the total count of each enemy
+            {
+                foreach (int n in enemy_type.sequence)
+                {
+                    for (int i = 0; i < n; i++)
+                    {
+                        if (currentcount >= count)
+                        {
+                            goto count_finished;            // hope this don't cause problems cause I heard it's bad to use this
+                        }
+                        currentcount += 1;
+                        yield return SpawnEnemy();
+                    }
+                    yield return new WaitForSeconds(enemy_type.delay);
+                }
+            }
+            count_finished:;
+        }
 
         yield return new WaitWhile(() => GameManager.Instance.enemy_count > 0);
         GameManager.Instance.state = GameManager.GameState.WAVEEND;
