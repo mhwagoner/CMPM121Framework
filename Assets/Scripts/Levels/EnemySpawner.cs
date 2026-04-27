@@ -94,18 +94,21 @@ public class EnemySpawner : MonoBehaviour
             spawn_var["base"] = enemy_types[spawn_type.enemy].hp;
             count = RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.count, spawn_var);
 
-            foreach (int n in spawn_type.sequence)      // the loop that spawns the total count of each enemy
+            while(currentCount < count)     // the main loop that spawns the total count of each enemy
             {
-                for (int i = 0; i < n; i++)     // spawn as many enemies as values of sequence
+                foreach (int n in spawn_type.sequence)
                 {
-                    if (currentCount < count)   // stop spawning if already spawned wave total
+                    for (int i = 0; i < n; i++)     // spawn as many enemies as values of sequence
                     {
-                        currentCount += 1;
-                        yield return SpawnEnemy();
+                        if (currentCount < count)   // stop spawning if already spawned wave total
+                        {
+                            currentCount += 1;
+                            yield return SpawnEnemy();
+                        }
                     }
-                }
 
-                yield return new WaitForSeconds(spawn_type.delay);
+                    yield return new WaitForSeconds(spawn_type.delay);
+                }
             }
         }
 
