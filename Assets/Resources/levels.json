@@ -108,5 +108,19 @@
                 "location": "random bone"
             }
         ]
+   },
+   {
+       "name": "Baby Easy",
+       "waves": 2,
+       "spawns": [
+            {
+                "enemy": "zombie",
+                "count": "2 wave +",
+                "hp": "base 5 wave * +",
+                "delay": "5",
+                "sequence": [1],
+                "location": "random"
+            }
+        ]
    }
 ]

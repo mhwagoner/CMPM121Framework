@@ -23,8 +23,8 @@ public class EnemySpawner : MonoBehaviour
         { "wave", 0 } 
     };
     private Level selectedLevel;
-    private int currentwave = 1;
-    private int currentcount;
+    private int currentWave = 1;
+    private int currentCount;
     private int count;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -63,9 +63,9 @@ public class EnemySpawner : MonoBehaviour
 
     public void NextWave()      // should keep track of what wave we are on
     {
-        currentwave += 1;
-        spawn_var["wave"] = currentwave;
-        if (currentwave > selectedLevel.waves)
+        currentWave += 1;
+        spawn_var["wave"] = currentWave;
+        if (currentWave > selectedLevel.waves)
         {
             //stop running the game
         }
@@ -88,28 +88,25 @@ public class EnemySpawner : MonoBehaviour
         //     yield return SpawnEnemy();
         // }
 
-        foreach (var enemy_type in selectedLevel.spawns)    // not sure if this means all the enemy types spawn at the same time or one at a time
+        foreach (var spawn_type in selectedLevel.spawns)    // not sure if this means all the enemy types spawn at the same time or one at a time
         {                                                   // I think it's one at a time, which is not what we want
-            currentcount = 0;
-            spawn_var["base"] = enemy_types[enemy_type.enemy].hp;
-            count = RPNEvaluator.RPNEvaluator.Evaluate(enemy_type.count, spawn_var);
-            while (true)                                    // the loop that spawns the total count of each enemy
+            currentCount = 0;
+            spawn_var["base"] = enemy_types[spawn_type.enemy].hp;
+            count = RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.count, spawn_var);
+
+            foreach (int n in spawn_type.sequence)      // the loop that spawns the total count of each enemy
             {
-                foreach (int n in enemy_type.sequence)
+                for (int i = 0; i < n; i++)     // spawn as many enemies as values of sequence
                 {
-                    for (int i = 0; i < n; i++)
+                    if (currentCount < count)   // stop spawning if already spawned wave total
                     {
-                        if (currentcount >= count)
-                        {
-                            goto count_finished;            // hope this don't cause problems cause I heard it's bad to use this
-                        }
-                        currentcount += 1;
+                        currentCount += 1;
                         yield return SpawnEnemy();
                     }
-                    yield return new WaitForSeconds(enemy_type.delay);
                 }
+
+                yield return new WaitForSeconds(spawn_type.delay);
             }
-            count_finished:;
         }
 
         yield return new WaitWhile(() => GameManager.Instance.enemy_count > 0);
