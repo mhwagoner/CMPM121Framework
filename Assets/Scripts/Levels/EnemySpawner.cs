@@ -14,7 +14,7 @@ public class EnemySpawner : MonoBehaviour
     public Image level_selector;
     public GameObject button;
     public GameObject enemy;
-    public SpawnPoint[] SpawnPoints;    
+    public SpawnPoint[] SpawnPoints;
     private Dictionary<string, Enemy> enemy_types = new Dictionary<string, Enemy>();
     private Dictionary<string, Level> level_types = new Dictionary<string, Level>();
     private Dictionary<string, int> spawn_var = new Dictionary<string, int>
@@ -23,6 +23,8 @@ public class EnemySpawner : MonoBehaviour
         { "wave", 0 } 
     };
     private Level selectedLevel;
+    private SpawnPoint spawn_point;
+    public List<SpawnPoint> SpawnPoints_type;
     private int currentWave = 1;
     private int currentCount;
     private int count;
@@ -107,7 +109,7 @@ public class EnemySpawner : MonoBehaviour
                     if (currentCount < count)   // stop spawning if already spawned wave total
                     {
                         currentCount += 1;
-                        SpawnEnemy();
+                        SpawnEnemy(spawn_type);
                     }
                 }
 
@@ -116,11 +118,26 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void SpawnEnemy()    // spawns single enemy
+    public void SpawnEnemy(Spawn spawn_type)    // spawns single enemy
     {
-        SpawnPoint spawn_point = SpawnPoints[Random.Range(0, SpawnPoints.Length)];
+        string[] location = spawn_type.location.Split(' ');
+        if (location.Length == 1)
+        {
+           spawn_point = SpawnPoints[Random.Range(0, SpawnPoints.Length)];  // random location
+        }
+        else
+        {
+            // go through SpawnPoints array and add the right kind/type to its own list
+            foreach (SpawnPoint sp in SpawnPoints)
+            {
+                if (sp.kind.ToString() == location[1].ToUpper())
+                {
+                    SpawnPoints_type.Add(sp);
+                }
+            }
+            spawn_point = SpawnPoints_type[Random.Range(0, SpawnPoints_type.Count)];
+        }
         Vector2 offset = Random.insideUnitCircle * 1.8f;
-                
         Vector3 initial_position = spawn_point.transform.position + new Vector3(offset.x, offset.y, 0);
         GameObject new_enemy = Instantiate(enemy, initial_position, Quaternion.identity);
 
