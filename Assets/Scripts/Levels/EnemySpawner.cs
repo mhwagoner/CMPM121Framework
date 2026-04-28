@@ -23,7 +23,7 @@ public class EnemySpawner : MonoBehaviour
     private int currentWave = 1;
     private float waveStartTime;
     private float waveEndTime;
-    private int enemy_spawns_cleared = 0;
+    private int enemy_coroutines_finished = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -82,14 +82,14 @@ public class EnemySpawner : MonoBehaviour
         GameManager.Instance.state = GameManager.GameState.INWAVE;
         //start timer
 
-        enemy_spawns_cleared = 0; // track how many enemy coroutines have finished
+        enemy_coroutines_finished = 0; // track how many enemy coroutines have finished
 
         foreach (var spawn_type in selectedLevel.spawns)
         {
             StartCoroutine(SpawnEnemyType(spawn_type));
         }
 
-        yield return new WaitWhile(() => (GameManager.Instance.enemy_count > 0 || enemy_spawns_cleared < selectedLevel.spawns.Count));
+        yield return new WaitWhile(() => (GameManager.Instance.enemy_count > 0 || enemy_coroutines_finished < selectedLevel.spawns.Count));
         GameManager.Instance.state = GameManager.GameState.WAVEEND;
         //end timer
         //update variable in gameManager
@@ -123,7 +123,7 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        enemy_spawns_cleared++;
+        enemy_coroutines_finished++;
     }
 
     public void SpawnEnemy(Spawn spawn_type)    // spawns single enemy
