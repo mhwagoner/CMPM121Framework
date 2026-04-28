@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Rendering;
 
 public class GameManager 
 {
@@ -16,6 +17,7 @@ public class GameManager
     public GameState state;
 
     public int countdown;
+    public float waveTimer = 0.0f;
     private static GameManager theInstance;
     public static GameManager Instance {  get
         {

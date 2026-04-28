@@ -1,5 +1,6 @@
 using UnityEngine;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 public class LoadingJSON    // could this work? hopefully we could still access everything we need to if we did this
 {

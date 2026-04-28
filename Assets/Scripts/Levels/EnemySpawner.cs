@@ -28,6 +28,8 @@ public class EnemySpawner : MonoBehaviour
     private int currentWave = 1;
     private int currentCount;
     private int count;
+    private float waveStartTime;
+    private float waveEndTime;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -85,6 +87,7 @@ public class EnemySpawner : MonoBehaviour
             GameManager.Instance.countdown--;
         }
         GameManager.Instance.state = GameManager.GameState.INWAVE;
+        //start timer
 
         foreach (var spawn_type in selectedLevel.spawns)
         {
@@ -96,6 +99,9 @@ public class EnemySpawner : MonoBehaviour
 
         yield return new WaitWhile(() => GameManager.Instance.enemy_count > 0);
         GameManager.Instance.state = GameManager.GameState.WAVEEND;
+        //end timer
+        //update variable in gameManager
+
     }
 
     IEnumerator SpawnEnemyType(Spawn spawn_type)    // spawns all enemies of a single type
