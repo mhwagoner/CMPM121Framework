@@ -89,6 +89,7 @@ public class EnemySpawner : MonoBehaviour
             StartCoroutine(SpawnEnemyType(spawn_type));
         }
 
+        // wait for all coroutines to finish and enemy count to be zero
         yield return new WaitWhile(() => (GameManager.Instance.enemy_count > 0 || enemy_coroutines_finished < selectedLevel.spawns.Count));
         GameManager.Instance.state = GameManager.GameState.WAVEEND;
         //end timer
@@ -123,7 +124,7 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        enemy_coroutines_finished++;
+        enemy_coroutines_finished++; // communicate that this spawn coroutine has finished
     }
 
     public void SpawnEnemy(Spawn spawn_type)    // spawns single enemy
@@ -157,15 +158,17 @@ public class EnemySpawner : MonoBehaviour
         GameObject new_enemy = Instantiate(enemy, initial_position, Quaternion.identity);
 
         Enemy enemy_data = enemy_types[spawn_type.enemy];
+        // sprite
         new_enemy.GetComponent<SpriteRenderer>().sprite = GameManager.Instance.enemySpriteManager.Get(enemy_data.sprite);
         EnemyController en = new_enemy.GetComponent<EnemyController>();
 
+        // hp
         Dictionary<string, int> spawn_var = new Dictionary<string, int> { { "base", enemy_data.hp }, { "wave", currentWave } };
         en.hp = new Hittable(RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.hp, spawn_var), Hittable.Team.MONSTERS, new_enemy);
-
+        // speed
         spawn_var["base"] = enemy_data.speed;
         en.speed = RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.speed, spawn_var);
-
+        // damage
         spawn_var["base"] = enemy_data.damage;
         en.damage = RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.damage, spawn_var);
 
