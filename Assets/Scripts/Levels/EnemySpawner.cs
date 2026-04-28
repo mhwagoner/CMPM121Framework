@@ -155,6 +155,7 @@ public class EnemySpawner : MonoBehaviour
         EnemyController en = new_enemy.GetComponent<EnemyController>();
         en.hp = new Hittable(RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.hp, spawn_var), Hittable.Team.MONSTERS, new_enemy);
         en.speed = enemy_data.speed;
+        en.damage = enemy_data.damage;
         GameManager.Instance.AddEnemy(new_enemy);
     }
 
