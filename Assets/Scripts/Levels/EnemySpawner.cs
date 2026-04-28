@@ -100,11 +100,11 @@ public class EnemySpawner : MonoBehaviour
     {
         Dictionary<string, int> spawn_var = new Dictionary<string, int>
         {
-            { "base",  enemy_types[spawn_type.enemy].hp},
             { "wave", currentWave }
         };
         int currentCount = 0;
         int count = RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.count, spawn_var);
+        int spawn_delay = RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.delay, spawn_var);
 
         while (currentCount < count)     // the main loop that spawns the total count of each enemy
         {
@@ -115,18 +115,18 @@ public class EnemySpawner : MonoBehaviour
                     if (currentCount < count)   // stop spawning if already spawned wave total
                     {
                         currentCount += 1;
-                        SpawnEnemy(spawn_type, spawn_var);
+                        SpawnEnemy(spawn_type);
                     }
                 }
 
-                yield return new WaitForSeconds(spawn_type.delay);
+                yield return new WaitForSeconds(spawn_delay);
             }
         }
 
         enemy_spawns_cleared++;
     }
 
-    public void SpawnEnemy(Spawn spawn_type, Dictionary<string, int> spawn_var)    // spawns single enemy
+    public void SpawnEnemy(Spawn spawn_type)    // spawns single enemy
     {
         string[] location = spawn_type.location.Split(' ');
         if (location.Length == 1)
@@ -153,9 +153,16 @@ public class EnemySpawner : MonoBehaviour
         Enemy enemy_data = enemy_types[spawn_type.enemy];
         new_enemy.GetComponent<SpriteRenderer>().sprite = GameManager.Instance.enemySpriteManager.Get(enemy_data.sprite);
         EnemyController en = new_enemy.GetComponent<EnemyController>();
+
+        Dictionary<string, int> spawn_var = new Dictionary<string, int> { { "base", enemy_data.hp}, { "wave", currentWave } };
         en.hp = new Hittable(RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.hp, spawn_var), Hittable.Team.MONSTERS, new_enemy);
-        en.speed = enemy_data.speed;
-        en.damage = enemy_data.damage;
+
+        spawn_var["base"] = enemy_data.speed;
+        en.speed = RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.speed, spawn_var);
+
+        spawn_var["base"] = enemy_data.damage;
+        en.damage = RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.damage, spawn_var);
+        
         GameManager.Instance.AddEnemy(new_enemy);
     }
 
