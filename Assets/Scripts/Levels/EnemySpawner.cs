@@ -17,17 +17,10 @@ public class EnemySpawner : MonoBehaviour
     public SpawnPoint[] SpawnPoints;
     private Dictionary<string, Enemy> enemy_types = new Dictionary<string, Enemy>();
     private Dictionary<string, Level> level_types = new Dictionary<string, Level>();
-    private Dictionary<string, int> spawn_var = new Dictionary<string, int>
-    { 
-        { "base", 0 }, 
-        { "wave", 0 } 
-    };
     private Level selectedLevel;
     private SpawnPoint spawn_point;
     public List<SpawnPoint> SpawnPoints_type;
     private int currentWave = 1;
-    private int currentCount;
-    private int count;
     private float waveStartTime;
     private float waveEndTime;
 
@@ -68,7 +61,6 @@ public class EnemySpawner : MonoBehaviour
     public void NextWave()      // should keep track of what wave we are on
     {
         currentWave += 1;
-        spawn_var["wave"] = currentWave;
         if (currentWave > selectedLevel.waves)
         {
             //stop running the game
@@ -91,10 +83,7 @@ public class EnemySpawner : MonoBehaviour
 
         foreach (var spawn_type in selectedLevel.spawns)
         {
-            currentCount = 0;
-            spawn_var["base"] = enemy_types[spawn_type.enemy].hp;
-            count = RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.count, spawn_var);
-            yield return SpawnEnemyType(spawn_type);
+            StartCoroutine(SpawnEnemyType(spawn_type));
         }
 
         yield return new WaitWhile(() => GameManager.Instance.enemy_count > 0);
@@ -106,7 +95,15 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnEnemyType(Spawn spawn_type)    // spawns all enemies of a single type
     {
-        while(currentCount < count)     // the main loop that spawns the total count of each enemy
+        Dictionary<string, int> spawn_var = new Dictionary<string, int>
+        {
+            { "base",  enemy_types[spawn_type.enemy].hp},
+            { "wave", currentWave }
+        };
+        int currentCount = 0;
+        int count = RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.count, spawn_var);
+
+        while (currentCount < count)     // the main loop that spawns the total count of each enemy
         {
             foreach (int n in spawn_type.sequence)
             {
@@ -115,7 +112,7 @@ public class EnemySpawner : MonoBehaviour
                     if (currentCount < count)   // stop spawning if already spawned wave total
                     {
                         currentCount += 1;
-                        SpawnEnemy(spawn_type);
+                        SpawnEnemy(spawn_type, spawn_var);
                     }
                 }
 
@@ -124,7 +121,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void SpawnEnemy(Spawn spawn_type)    // spawns single enemy
+    public void SpawnEnemy(Spawn spawn_type, Dictionary<string, int> spawn_var)    // spawns single enemy
     {
         string[] location = spawn_type.location.Split(' ');
         if (location.Length == 1)
@@ -147,10 +144,12 @@ public class EnemySpawner : MonoBehaviour
         Vector3 initial_position = spawn_point.transform.position + new Vector3(offset.x, offset.y, 0);
         GameObject new_enemy = Instantiate(enemy, initial_position, Quaternion.identity);
 
-        new_enemy.GetComponent<SpriteRenderer>().sprite = GameManager.Instance.enemySpriteManager.Get(0);
+        print(spawn_type.enemy);
+        Enemy enemy_data = enemy_types[spawn_type.enemy];
+        new_enemy.GetComponent<SpriteRenderer>().sprite = GameManager.Instance.enemySpriteManager.Get(enemy_data.sprite);
         EnemyController en = new_enemy.GetComponent<EnemyController>();
-        en.hp = new Hittable(50, Hittable.Team.MONSTERS, new_enemy);
-        en.speed = 10;
+        en.hp = new Hittable(RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.hp, spawn_var), Hittable.Team.MONSTERS, new_enemy);
+        en.speed = enemy_data.speed;
         GameManager.Instance.AddEnemy(new_enemy);
     }
 
