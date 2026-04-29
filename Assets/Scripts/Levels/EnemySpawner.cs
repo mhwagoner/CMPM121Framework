@@ -101,7 +101,13 @@ public class EnemySpawner : MonoBehaviour
         //time to beat wave
         waveTime = waveEndTime - waveStartTime;
         //update UI text
-        GameManager.Instance.UpdateText(waveStatsText, "Wave Stats:\n" + "Seconds to beat: " + Mathf.Round(waveTime));
+        GameManager.Instance.UpdateText(waveStatsText, 
+        "Wave " + currentWave + " Stats\n" +
+        "=+=+=+=+=+=+=\n" + 
+        "Seconds Taken: " + Mathf.Round(waveTime) + "\n" +
+        "Damage Dealt: " + "A lot" + "\n" +
+        "Spells Used: " + "Many"
+        );
 
     }
 
