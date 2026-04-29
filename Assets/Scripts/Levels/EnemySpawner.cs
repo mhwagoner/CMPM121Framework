@@ -40,7 +40,7 @@ public class EnemySpawner : MonoBehaviour
         {
             UnityEngine.Debug.Log(lvl.Key);
             GameObject level_button = Instantiate(button, level_selector.transform);
-            level_button.transform.localPosition = new Vector3(0, 130);
+            //level_button.transform.localPosition = new Vector3(0, 130);
             level_button.GetComponent<MenuSelectorController>().spawner = this;
             level_button.GetComponent<MenuSelectorController>().SetLevel(lvl.Key);
         }
@@ -50,6 +50,12 @@ public class EnemySpawner : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void ShowLevels()
+    {
+        GameManager.Instance.state = GameManager.GameState.PREGAME; 
+        level_selector.gameObject.SetActive(true);
     }
 
     public void StartLevel(string levelname) //level name needs to be used somewhere to determine enemies and waves
@@ -64,12 +70,23 @@ public class EnemySpawner : MonoBehaviour
 
     public void NextWave()      // should keep track of what wave we are on
     {
-        currentWave += 1;
-        if (currentWave > selectedLevel.waves)
+        if (currentWave == selectedLevel.waves)
         {
-            //stop running the game
+            //update text to say player wins
+            GameManager.Instance.UpdateText(waveStatsText, 
+            "You Freaking Beat the Level!!!\n" +
+            "=+=+=+=+=+=+=\n" + 
+            "Total Seconds Taken: " + "temp" + "\n" +
+            "Total Damage Dealt: " + "A lot" + "\n" +
+            "Total Spells Used: " + "Many" + "\n" +
+            "Total Enemies Killed: " + "Many"
+            );
+            GameManager.Instance.state = GameManager.GameState.GAMEOVER; 
+        } else
+        {
+            currentWave += 1;
+            StartCoroutine(SpawnWave());
         }
-        StartCoroutine(SpawnWave());
     }
 
 
@@ -106,7 +123,8 @@ public class EnemySpawner : MonoBehaviour
         "=+=+=+=+=+=+=\n" + 
         "Seconds Taken: " + Mathf.Round(waveTime) + "\n" +
         "Damage Dealt: " + "A lot" + "\n" +
-        "Spells Used: " + "Many"
+        "Spells Used: " + "Many" + "\n" +
+        "Enemies Killed: " + "Many"
         );
 
     }

@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.IO;
 using System.Collections.Generic;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public int speed;
 
     public Unit unit;
+    public TextMeshProUGUI waveStatsText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -64,6 +66,16 @@ public class PlayerController : MonoBehaviour
     void Die()
     {
         Debug.Log("You Lost");
+        //update text to say player loses
+        GameManager.Instance.UpdateText(waveStatsText, 
+        "You Freaking Lost Bro!!!\n" +
+        "=+=+=+=+=+=+=\n" + 
+        "Total Seconds Taken: " + "temp" + "\n" +
+        "Total Damage Dealt: " + "A lot" + "\n" +
+        "Total Spells Used: " + "Many" + "\n" +
+        "Total Enemies Killed: " + "Many"
+        );
+        GameManager.Instance.state = GameManager.GameState.GAMEOVER; 
     }
 
 }
