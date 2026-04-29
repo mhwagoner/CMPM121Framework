@@ -8,10 +8,10 @@
               "lastname": "Rocco",
               "github": "Mario-2",
               "email": "zrocco@ucsc.edu"},
-             {"firstname": "my",
-              "lastname": "partner",
-              "github": "githubuser2",
-              "email": "mypartner@ucsc.edu"}
+             {"firstname": "Michael",
+              "lastname": "Wagoner",
+              "github": "mhwagone",
+              "email": "mhwagone@ucsc.edu"}
             ],
    "repository": "git@github.com:mhwagoner/CMPM121Framework.git",
    "commit": "0123456789abcdef"
