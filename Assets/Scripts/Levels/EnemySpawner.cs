@@ -6,13 +6,15 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
-using System.Diagnostics;
+//using System.Diagnostics;
 using RPNEvaluator;
+using TMPro;
 
 public class EnemySpawner : MonoBehaviour
 {
     public Image level_selector;
     public GameObject button;
+    public TextMeshProUGUI waveStatsText;
     public GameObject enemy;
     public SpawnPoint[] SpawnPoints;
     private Dictionary<string, Enemy> enemy_types = new Dictionary<string, Enemy>();
@@ -23,6 +25,7 @@ public class EnemySpawner : MonoBehaviour
     private int currentWave = 1;
     private float waveStartTime;
     private float waveEndTime;
+    private float waveTime;
     private int enemy_coroutines_finished = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -80,7 +83,8 @@ public class EnemySpawner : MonoBehaviour
             GameManager.Instance.countdown--;
         }
         GameManager.Instance.state = GameManager.GameState.INWAVE;
-        //start timer
+        //time at wave start
+        waveStartTime = Time.time;
 
         enemy_coroutines_finished = 0; // track how many enemy coroutines have finished
 
@@ -92,8 +96,12 @@ public class EnemySpawner : MonoBehaviour
         // wait for all coroutines to finish and enemy count to be zero
         yield return new WaitWhile(() => (GameManager.Instance.enemy_count > 0 || enemy_coroutines_finished < selectedLevel.spawns.Count));
         GameManager.Instance.state = GameManager.GameState.WAVEEND;
-        //end timer
-        //update variable in gameManager
+        //time at wave end
+        waveEndTime = Time.time;
+        //time to beat wave
+        waveTime = waveEndTime - waveStartTime;
+        //update UI text
+        GameManager.Instance.UpdateText(waveStatsText, "Wave Stats:\n" + "Seconds to beat: " + Mathf.Round(waveTime));
 
     }
 
