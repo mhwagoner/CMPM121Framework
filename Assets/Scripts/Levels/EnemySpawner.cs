@@ -187,12 +187,6 @@ public class EnemySpawner : MonoBehaviour
         Vector2 offset = Random.insideUnitCircle * 1.8f;
         Vector3 initial_position = spawn_point.transform.position + new Vector3(offset.x, offset.y, 0);
 
-        InstantiateEnemy(spawn_type, initial_position);
-    }
-
-    // Create an enemy instance of spawn_type at initial_positon
-    private GameObject InstantiateEnemy(Spawn spawn_type, Vector3 initial_position)
-    {
         GameObject new_enemy = Instantiate(enemy, initial_position, Quaternion.identity);
 
         Enemy enemy_data = enemy_types[spawn_type.enemy];
@@ -211,8 +205,6 @@ public class EnemySpawner : MonoBehaviour
         en.damage = RPNEvaluator.RPNEvaluator.Evaluate(spawn_type.damage, spawn_var);
 
         GameManager.Instance.AddEnemy(new_enemy);
-
-        return new_enemy;
     }
 
     // https://yawgmoth.github.io/CMPM121/slides/lecture4.html#15 :3c
