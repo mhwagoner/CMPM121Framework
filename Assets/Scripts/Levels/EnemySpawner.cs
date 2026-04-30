@@ -20,8 +20,7 @@ public class EnemySpawner : MonoBehaviour
     private Dictionary<string, Enemy> enemy_types = new Dictionary<string, Enemy>();
     private Dictionary<string, Level> level_types = new Dictionary<string, Level>();
     private Level selectedLevel;
-    private SpawnPoint spawn_point;
-    public List<SpawnPoint> SpawnPoints_type;
+    private List<SpawnPoint> SpawnPoints_type;
     private int currentWave = 1;
     private float waveStartTime;
     private float waveEndTime;
@@ -161,6 +160,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy(Spawn spawn_type)    // spawns single enemy
     {
+        SpawnPoint spawn_point;
         string[] location = spawn_type.location.Split(' ');
         if (location.Length == 1)
         {

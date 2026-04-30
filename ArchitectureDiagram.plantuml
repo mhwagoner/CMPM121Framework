@@ -1,5 +1,0 @@
-@startuml Architecture Diagram
-skinparam Style strictuml
-skinparam SequenceMessageAlignment center
-
-@enduml
