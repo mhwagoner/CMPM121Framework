@@ -4,15 +4,15 @@
               "lastname": "Stasi",
               "github": "me333e",
               "email": "astasi@ucsc.edu"},
-              {"firstname": "my",
-              "lastname": "name",
-              "github": "githubuser",
-              "email": "myname@ucsc.edu"},
-             {"firstname": "my",
-              "lastname": "partner",
-              "github": "githubuser2",
-              "email": "mypartner@ucsc.edu"}
+              {"firstname": "Zachary",
+              "lastname": "Rocco",
+              "github": "Mario-2",
+              "email": "zrocco@ucsc.edu"},
+             {"firstname": "Michael",
+              "lastname": "Wagoner",
+              "github": "mhwagone",
+              "email": "mhwagone@ucsc.edu"}
             ],
-   "repository": "git@github.com:name/repository.git",
+   "repository": "git@github.com:mhwagoner/CMPM121Framework.git",
    "commit": "0123456789abcdef"
 }
