@@ -23,6 +23,14 @@
                 "count": "wave 5 / 1 wave 5 % - *",
                 "hp": "100 25 wave * +",
                 "location": "random bone"
+            },
+            {
+                "enemy": "wisp",
+                "count": "2 wave * wave 2 % *",
+                "hp": "base 5 wave * 2 / +",
+                "delay": "6",
+                "sequence": [2, 3, 4],
+                "location": "random red"
             }
         ]
    },
@@ -51,6 +59,14 @@
                 "hp": "75 50 wave * +",
                 "damage": "base 10 +",
                 "location": "random bone"
+            },
+            {
+                "enemy": "wisp",
+                "count": "3 wave * wave 2 % *",
+                "hp": "25 wave * 2 /",
+                "delay": "6",
+                "sequence": [3, 4, 5],
+                "location": "random red"
             }
         ]
    },
@@ -78,6 +94,14 @@
                 "hp": "75 15 wave * +",
                 "damage": "base 5 -",
                 "location": "random bone"
+            },
+            {
+                "enemy": "wisp",
+                "count": "3 wave * wave 2 % *",
+                "hp": "15 wave * 2 /",
+                "delay": "6",
+                "sequence": [3, 4, 5],
+                "location": "random red"
             }
         ]
    },
@@ -106,6 +130,14 @@
                 "hp": "75 50 wave * +",
                 "damage": "base 10 +",
                 "location": "random bone"
+            },
+            {
+                "enemy": "wisp",
+                "count": "50 wave 10 * +",
+                "hp": "25 wave * 2 /",
+                "delay": "6",
+                "sequence": [3, 4, 5],
+                "location": "random red"
             }
         ]
    },
