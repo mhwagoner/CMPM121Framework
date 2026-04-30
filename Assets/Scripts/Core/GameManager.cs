@@ -1,9 +1,10 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.Rendering;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class GameManager 
 {
@@ -63,5 +64,11 @@ public class GameManager
     public void UpdateText(TextMeshProUGUI UItext, string newStats)
     {
         UItext.text = newStats;
+    }
+
+    public void ResetGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        theInstance = new GameManager();
     }
 }

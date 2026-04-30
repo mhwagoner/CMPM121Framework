@@ -1,14 +1,15 @@
-using UnityEngine;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using System.IO;
-using System.Collections.Generic;
-using UnityEngine.UI;
-using System.Collections;
-using System.Linq;
+using Newtonsoft.Json.Linq;
 //using System.Diagnostics;
 using RPNEvaluator;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -228,5 +229,10 @@ public class EnemySpawner : MonoBehaviour
             Level lvl = level.ToObject<Level>();
             level_types[lvl.name] = lvl;
         }
+    }
+
+    public void ResetGame()
+    {
+        GameManager.Instance.ResetGame();
     }
 }
