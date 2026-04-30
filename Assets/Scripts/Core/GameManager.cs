@@ -19,7 +19,6 @@ public class GameManager
     public GameState state;
 
     public int countdown;
-    public float waveTimer = 0.0f;
     private static GameManager theInstance;
     public static GameManager Instance {  get
         {
@@ -69,6 +68,7 @@ public class GameManager
     public void ResetGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        theInstance = new GameManager();
+        EventBus.Instance.DestroyInstance();
+        theInstance = null;
     }
 }
