@@ -20,12 +20,7 @@ public class EnemySpawner : MonoBehaviour
     private Dictionary<string, Enemy> enemy_types = new Dictionary<string, Enemy>();
     private Dictionary<string, Level> level_types = new Dictionary<string, Level>();
     private Level selectedLevel;
-    private SpawnPoint spawn_point;
-    public List<SpawnPoint> SpawnPoints_type;
     private int currentWave = 1;
-    private float waveStartTime;
-    private float waveEndTime;
-    private float waveTime;
     private int enemy_coroutines_finished = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -100,8 +95,9 @@ public class EnemySpawner : MonoBehaviour
             GameManager.Instance.countdown--;
         }
         GameManager.Instance.state = GameManager.GameState.INWAVE;
+
         //time at wave start
-        waveStartTime = Time.time;
+        float waveStartTime = Time.time;
 
         enemy_coroutines_finished = 0; // track how many enemy coroutines have finished
 
@@ -114,9 +110,9 @@ public class EnemySpawner : MonoBehaviour
         yield return new WaitWhile(() => (GameManager.Instance.enemy_count > 0 || enemy_coroutines_finished < selectedLevel.spawns.Count));
         GameManager.Instance.state = GameManager.GameState.WAVEEND;
         //time at wave end
-        waveEndTime = Time.time;
+        float waveEndTime = Time.time;
         //time to beat wave
-        waveTime = waveEndTime - waveStartTime;
+        float waveTime = waveEndTime - waveStartTime;
         //update UI text
         GameManager.Instance.UpdateText(waveStatsText, 
         "Wave " + currentWave + " Stats\n" +
@@ -143,12 +139,14 @@ public class EnemySpawner : MonoBehaviour
         {
             foreach (int n in spawn_type.sequence)
             {
+                SpawnPoint spawn_point = SelectSpawnPoint(spawn_type);
+
                 for (int i = 0; i < n; i++)     // spawn as many enemies as values of sequence
                 {
                     if (currentCount < count)   // stop spawning if already spawned wave total
                     {
                         currentCount += 1;
-                        SpawnEnemy(spawn_type);
+                        SpawnEnemy(spawn_type, spawn_point);
                     }
                 }
 
@@ -159,12 +157,14 @@ public class EnemySpawner : MonoBehaviour
         enemy_coroutines_finished++; // communicate that this spawn coroutine has finished
     }
 
-    public void SpawnEnemy(Spawn spawn_type)    // spawns single enemy
+    public SpawnPoint SelectSpawnPoint(Spawn spawn_type)
     {
+        SpawnPoint spawn_point = SpawnPoints[0];
+        List<SpawnPoint> SpawnPoints_type = new List<SpawnPoint>();
         string[] location = spawn_type.location.Split(' ');
         if (location.Length == 1)
         {
-           spawn_point = SpawnPoints[Random.Range(0, SpawnPoints.Length)];  // random location
+            spawn_point = SpawnPoints[Random.Range(0, SpawnPoints.Length)];  // random location
         }
         else
         {
@@ -178,6 +178,12 @@ public class EnemySpawner : MonoBehaviour
             }
             spawn_point = SpawnPoints_type[Random.Range(0, SpawnPoints_type.Count)];
         }
+
+        return spawn_point;
+    }
+
+    public void SpawnEnemy(Spawn spawn_type, SpawnPoint spawn_point)    // spawns single enemy
+    {
         Vector2 offset = Random.insideUnitCircle * 1.8f;
         Vector3 initial_position = spawn_point.transform.position + new Vector3(offset.x, offset.y, 0);
 
