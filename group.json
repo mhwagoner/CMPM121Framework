@@ -10,9 +10,9 @@
               "email": "zrocco@ucsc.edu"},
              {"firstname": "Michael",
               "lastname": "Wagoner",
-              "github": "mhwagone",
+              "github": "mhwagoner",
               "email": "mhwagone@ucsc.edu"}
             ],
    "repository": "git@github.com:mhwagoner/CMPM121Framework.git",
-   "commit": "0123456789abcdef"
+   "commit": "7970f7ff4cad6f6979184b8b07e27f994695ae69"
 }
