@@ -68,16 +68,8 @@ public class EnemySpawner : MonoBehaviour
     {
         if (currentWave == selectedLevel.waves)
         {
-            //update text to say player wins
-            GameManager.Instance.UpdateText(waveStatsText, 
-            "You Freaking Beat the Level!!!\n" +
-            "=+=+=+=+=+=+=\n" + 
-            "Total Seconds Taken: " + "temp" + "\n" +
-            "Total Damage Dealt: " + "A lot" + "\n" +
-            "Total Spells Used: " + "Many" + "\n" +
-            "Total Enemies Killed: " + "Many"
-            );
-            GameManager.Instance.state = GameManager.GameState.GAMEOVER; 
+            //player won
+            GameManager.Instance.LevelWon(waveStatsText);
         } else
         {
             currentWave += 1;
@@ -112,17 +104,11 @@ public class EnemySpawner : MonoBehaviour
         GameManager.Instance.state = GameManager.GameState.WAVEEND;
         //time at wave end
         float waveEndTime = Time.time;
-        //time to beat wave
+        //seconds taken
         float waveTime = waveEndTime - waveStartTime;
-        //update UI text
-        GameManager.Instance.UpdateText(waveStatsText, 
-        "Wave " + currentWave + " Stats\n" +
-        "=+=+=+=+=+=+=\n" + 
-        "Seconds Taken: " + Mathf.Round(waveTime) + "\n" +
-        "Damage Dealt: " + "A lot" + "\n" +
-        "Spells Used: " + "Many" + "\n" +
-        "Enemies Killed: " + "Many"
-        );
+        //update gamemanager
+        GameManager.Instance.waveTime = waveTime;
+        GameManager.Instance.WaveWon(currentWave, waveStatsText);       
 
     }
 

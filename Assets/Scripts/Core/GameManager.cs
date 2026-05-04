@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
@@ -38,6 +39,8 @@ public class GameManager
 
     private List<GameObject> enemies;
     public int enemy_count { get { return enemies.Count; } }
+    public float waveTime = 0.0f;
+    private float totalWaveTime = 0.0f;
 
     public void AddEnemy(GameObject enemy)
     {
@@ -46,6 +49,11 @@ public class GameManager
     public void RemoveEnemy(GameObject enemy)
     {
         enemies.Remove(enemy);
+    }
+
+    public void AddWaveTime(float addedTime)
+    {
+        //totalwa
     }
 
     public GameObject GetClosestEnemy(Vector3 point)
@@ -63,6 +71,33 @@ public class GameManager
     public void UpdateText(TextMeshProUGUI UItext, string newStats)
     {
         UItext.text = newStats;
+    }
+
+    public void WaveWon(int currentWave, TextMeshProUGUI waveStatsText)
+    {
+        UpdateText(waveStatsText, 
+        "Wave " + currentWave + " Stats\n" +
+        "=+=+=+=+=+=+=\n" + 
+        "Seconds Elapsed: " + Mathf.Round(waveTime) + "\n" +
+        "Damage Dealt: " + "A lot" + "\n" +
+        "Spells Used: " + "Many" + "\n" +
+        "Enemies Killed: " + "Many"
+        );
+        totalWaveTime += waveTime;
+    }
+
+    public void LevelWon(TextMeshProUGUI waveStatsText)
+    {
+        //update text to say player wins
+        GameManager.Instance.UpdateText(waveStatsText, 
+        "You Freaking Beat the Level!!!\n" +
+        "=+=+=+=+=+=+=\n" + 
+        "Total Seconds Elapsed: " + totalWaveTime + "\n" +
+        "Total Damage Dealt: " + "A lot" + "\n" +
+        "Total Spells Used: " + "Many" + "\n" +
+        "Total Enemies Killed: " + "Many"
+        );
+        state = GameState.GAMEOVER; 
     }
 
     public void ResetGame()
