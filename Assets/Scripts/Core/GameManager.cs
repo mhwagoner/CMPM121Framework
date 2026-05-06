@@ -36,6 +36,7 @@ public class GameManager
     public EnemySpriteManager enemySpriteManager;
     public PlayerSpriteManager playerSpriteManager;
     public RelicIconManager relicIconManager;
+    public TextMeshProUGUI betweenWaveText;
 
     private List<GameObject> enemies;
     public int enemy_count { get { return enemies.Count; } }
@@ -74,14 +75,19 @@ public class GameManager
         enemies = new List<GameObject>();
     }
 
-    public void UpdateText(TextMeshProUGUI UItext, string newStats)
+    public void UpdateText(string newText)
     {
-        UItext.text = newStats;
+        betweenWaveText.text = newText;
     }
 
-    public void WaveWon(int currentWave, TextMeshProUGUI waveStatsText)
+    public void UpdateText(TextMeshProUGUI UItext, string newText)
     {
-        UpdateText(waveStatsText, 
+        betweenWaveText.text = newText;
+    }
+
+    public void WaveWon(int currentWave)
+    {
+        UpdateText( 
         "Wave " + currentWave + " Stats\n" +
         "=+=+=+=+=+=+=\n" + 
         "Seconds Elapsed: " + Mathf.Round(waveTime) + "\n" +
@@ -95,10 +101,10 @@ public class GameManager
         waveEnemiesRemoved = 0;
     }
 
-    public void LevelWon(TextMeshProUGUI waveStatsText)
+    public void LevelWon()
     {
         //update text to say player wins
-        GameManager.Instance.UpdateText(waveStatsText, 
+        GameManager.Instance.UpdateText(
         "You Freaking Beat the Level!!!\n" +
         "=+=+=+=+=+=+=\n" + 
         "Total Seconds Elapsed: " + Mathf.Round(totalWaveTime) + "\n" +

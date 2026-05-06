@@ -15,7 +15,6 @@ public class EnemySpawner : MonoBehaviour
 {
     public Image level_selector;
     public GameObject button;
-    public TextMeshProUGUI waveStatsText;
     public GameObject enemy;
     public SpawnPoint[] SpawnPoints;
     private Dictionary<string, Enemy> enemy_types = new Dictionary<string, Enemy>();
@@ -69,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
         if (currentWave == selectedLevel.waves)
         {
             //player won
-            GameManager.Instance.LevelWon(waveStatsText);
+            GameManager.Instance.LevelWon();
         } else
         {
             currentWave += 1;
@@ -108,7 +107,7 @@ public class EnemySpawner : MonoBehaviour
         float waveTime = waveEndTime - waveStartTime;
         //update gamemanager
         GameManager.Instance.waveTime = waveTime;
-        GameManager.Instance.WaveWon(currentWave, waveStatsText);       
+        GameManager.Instance.WaveWon(currentWave);       
 
     }
 

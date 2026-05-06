@@ -4455,7 +4455,7 @@ GameObject:
   - component: {fileID: 1423932667}
   - component: {fileID: 1423932666}
   m_Layer: 5
-  m_Name: WaveStats
+  m_Name: BetweenWaveText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
