@@ -34,6 +34,7 @@ public class SpellCaster
         if (mana >= spell.GetManaCost() && spell.IsReady())
         {
             mana -= spell.GetManaCost();
+            GameManager.Instance.waveSpellsCasted++;
             yield return spell.Cast(where, target, team);
         }
         yield break;

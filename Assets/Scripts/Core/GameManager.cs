@@ -43,6 +43,8 @@ public class GameManager
     private float totalWaveTime = 0.0f;
     private int totalEnemiesRemoved = 0;
     private int waveEnemiesRemoved = 0;
+    public int totalSpellsCasted = 0;
+    public int waveSpellsCasted = 0;
 
     public void AddEnemy(GameObject enemy)
     {
@@ -84,9 +86,11 @@ public class GameManager
         "=+=+=+=+=+=+=\n" + 
         "Seconds Elapsed: " + Mathf.Round(waveTime) + "\n" +
         "Damage Dealt: " + "A lot" + "\n" +
-        "Spells Used: " + "Many" + "\n" +
+        "Spells Used: " + waveSpellsCasted + "\n" +
         "Enemies Killed: " + waveEnemiesRemoved
         );
+        totalSpellsCasted += waveSpellsCasted;
+        waveSpellsCasted = 0;
         totalWaveTime += waveTime;
         waveEnemiesRemoved = 0;
     }
@@ -99,7 +103,7 @@ public class GameManager
         "=+=+=+=+=+=+=\n" + 
         "Total Seconds Elapsed: " + Mathf.Round(totalWaveTime) + "\n" +
         "Total Damage Dealt: " + "A lot" + "\n" +
-        "Total Spells Used: " + "Many" + "\n" +
+        "Total Spells Used: " + totalSpellsCasted + "\n" +
         "Total Enemies Killed: " + totalEnemiesRemoved
         );
         state = GameState.GAMEOVER; 
@@ -107,6 +111,9 @@ public class GameManager
 
     public void ResetGame()
     {
+        totalSpellsCasted = 0;
+        totalEnemiesRemoved = 0;
+        totalWaveTime = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         EventBus.Instance.DestroyInstance();
         theInstance = null;
