@@ -41,6 +41,8 @@ public class GameManager
     public int enemy_count { get { return enemies.Count; } }
     public float waveTime = 0.0f;
     private float totalWaveTime = 0.0f;
+    private int totalEnemiesRemoved = 0;
+    private int waveEnemiesRemoved = 0;
 
     public void AddEnemy(GameObject enemy)
     {
@@ -49,6 +51,8 @@ public class GameManager
     public void RemoveEnemy(GameObject enemy)
     {
         enemies.Remove(enemy);
+        totalEnemiesRemoved++;
+        waveEnemiesRemoved++;
     }
 
     public void AddWaveTime(float addedTime)
@@ -81,9 +85,10 @@ public class GameManager
         "Seconds Elapsed: " + Mathf.Round(waveTime) + "\n" +
         "Damage Dealt: " + "A lot" + "\n" +
         "Spells Used: " + "Many" + "\n" +
-        "Enemies Killed: " + "Many"
+        "Enemies Killed: " + waveEnemiesRemoved
         );
         totalWaveTime += waveTime;
+        waveEnemiesRemoved = 0;
     }
 
     public void LevelWon(TextMeshProUGUI waveStatsText)
@@ -92,10 +97,10 @@ public class GameManager
         GameManager.Instance.UpdateText(waveStatsText, 
         "You Freaking Beat the Level!!!\n" +
         "=+=+=+=+=+=+=\n" + 
-        "Total Seconds Elapsed: " + totalWaveTime + "\n" +
+        "Total Seconds Elapsed: " + Mathf.Round(totalWaveTime) + "\n" +
         "Total Damage Dealt: " + "A lot" + "\n" +
         "Total Spells Used: " + "Many" + "\n" +
-        "Total Enemies Killed: " + "Many"
+        "Total Enemies Killed: " + totalEnemiesRemoved
         );
         state = GameState.GAMEOVER; 
     }
