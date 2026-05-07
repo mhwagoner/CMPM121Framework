@@ -7,7 +7,7 @@ using UnityEngine.Animations;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
-public class GameManager 
+public class GameManager
 {
     public enum GameState
     {
@@ -60,7 +60,8 @@ public class GameManager
 
     public void AddWaveTime(float addedTime)
     {
-        //totalwa
+        waveTime = addedTime;
+        totalWaveTime += addedTime;
     }
 
     public GameObject GetClosestEnemy(Vector3 point)
@@ -82,7 +83,7 @@ public class GameManager
 
     public void UpdateText(TextMeshProUGUI UItext, string newText)
     {
-        betweenWaveText.text = newText;
+        UItext.text = newText;
     }
 
     public void WaveWon(int currentWave)
@@ -104,7 +105,7 @@ public class GameManager
     public void LevelWon()
     {
         //update text to say player wins
-        GameManager.Instance.UpdateText(
+        UpdateText(
         "You Freaking Beat the Level!!!\n" +
         "=+=+=+=+=+=+=\n" + 
         "Total Seconds Elapsed: " + Mathf.Round(totalWaveTime) + "\n" +

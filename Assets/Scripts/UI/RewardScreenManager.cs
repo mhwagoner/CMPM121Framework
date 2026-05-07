@@ -1,14 +1,17 @@
+using TMPro;
 using UnityEngine;
 
 public class RewardScreenManager : MonoBehaviour
 {
     public GameObject rewardUI;
+    public TextMeshProUGUI betweenWaveText;
     public GameObject nextButton;
     public GameObject retryButton;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        GameManager.Instance.betweenWaveText = this.betweenWaveText; //Can't just get this component from reward UI because it's not active at start
     }
 
     // Update is called once per frame
