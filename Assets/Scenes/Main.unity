@@ -550,7 +550,7 @@ GameObject:
   - component: {fileID: 220180078}
   - component: {fileID: 220180077}
   m_Layer: 0
-  m_Name: RewardManager
+  m_Name: RewardUIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -568,10 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 889e30827d3de8847b0caf6a2d04eb83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rewardUI: {fileID: 1709288111}
-  betweenWaveText: {fileID: 1423932666}
-  nextButton: {fileID: 284566016}
-  retryButton: {fileID: 671084047}
+  rewardScreen: {fileID: 1709288111}
 --- !u!4 &220180078
 Transform:
   m_ObjectHideFlags: 0
@@ -903,7 +900,7 @@ GameObject:
   - component: {fileID: 284566019}
   - component: {fileID: 284566018}
   m_Layer: 5
-  m_Name: Next
+  m_Name: NextButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -973,7 +970,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1316251275}
         m_TargetAssemblyTypeName: EnemySpawner, Assembly-CSharp
         m_MethodName: NextWave
         m_Mode: 1
@@ -2510,12 +2507,12 @@ GameObject:
   - component: {fileID: 671084050}
   - component: {fileID: 671084049}
   m_Layer: 5
-  m_Name: Retry
+  m_Name: RetryButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &671084048
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2580,7 +2577,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1316251275}
         m_TargetAssemblyTypeName: EnemySpawner, Assembly-CSharp
         m_MethodName: ResetGame
         m_Mode: 1
@@ -4443,7 +4440,6 @@ MonoBehaviour:
   level_selector: {fileID: 1115058368}
   button: {fileID: 6791571272867747119, guid: 47865e4d0d1669541a3aa2992225a687, type: 3}
   enemy: {fileID: 1832418719708313566, guid: bebfa21247182184d92ab200b93e6cf0, type: 3}
-  SpawnPoints: []
 --- !u!1 &1423932664
 GameObject:
   m_ObjectHideFlags: 0
@@ -4456,7 +4452,7 @@ GameObject:
   - component: {fileID: 1423932667}
   - component: {fileID: 1423932666}
   m_Layer: 5
-  m_Name: WaveStats
+  m_Name: RewardScreenText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4501,7 +4497,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Wave Stats:'
+  m_text: temp reward screen text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6923,7 +6919,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1709288112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59592,9 +59588,9 @@ SceneRoots:
   - {fileID: 1718273953}
   - {fileID: 447376982}
   - {fileID: 1316251274}
+  - {fileID: 220180078}
   - {fileID: 2021125305}
   - {fileID: 967867794}
   - {fileID: 2306492998223050676}
-  - {fileID: 220180078}
   - {fileID: 947241246}
   - {fileID: 856041117}

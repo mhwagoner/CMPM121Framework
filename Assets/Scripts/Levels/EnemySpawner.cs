@@ -16,7 +16,7 @@ public class EnemySpawner : MonoBehaviour
     public Image level_selector;
     public GameObject button;
     public GameObject enemy;
-    public SpawnPoint[] SpawnPoints;
+    private SpawnPoint[] SpawnPoints;
     private Dictionary<string, Enemy> enemy_types = new Dictionary<string, Enemy>();
     private Dictionary<string, Level> level_types = new Dictionary<string, Level>();
     private Level selectedLevel;
@@ -103,7 +103,6 @@ public class EnemySpawner : MonoBehaviour
 
         // wait for all coroutines to finish and enemy count to be zero
         yield return new WaitWhile(() => (GameManager.Instance.enemy_count > 0 || enemy_coroutines_finished < selectedLevel.spawns.Count));
-        GameManager.Instance.state = GameManager.GameState.WAVEEND;
         //time at wave end
         float waveEndTime = Time.time;
         //seconds taken

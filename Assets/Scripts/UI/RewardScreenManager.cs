@@ -3,15 +3,19 @@ using UnityEngine;
 
 public class RewardScreenManager : MonoBehaviour
 {
-    public GameObject rewardUI;
-    public TextMeshProUGUI betweenWaveText;
-    public GameObject nextButton;
-    public GameObject retryButton;
+    public GameObject rewardScreen;
+    private TextMeshProUGUI rewardScreenText;
+    private GameObject nextButton;
+    private GameObject retryButton;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GameManager.Instance.betweenWaveText = this.betweenWaveText; //Can't just get this component from reward UI because it's not active at start
+        nextButton = rewardScreen.transform.Find("NextButton").gameObject;
+        retryButton = rewardScreen.transform.Find("RetryButton").gameObject;
+        rewardScreenText = rewardScreen.transform.Find("RewardScreenText").gameObject.GetComponent<TextMeshProUGUI>();
+        GameManager.Instance.rewardScreenText = rewardScreenText;
+        rewardScreen.SetActive(false);
     }
 
     // Update is called once per frame
@@ -21,17 +25,17 @@ public class RewardScreenManager : MonoBehaviour
         {
             retryButton.SetActive(false);
             nextButton.SetActive(true);
-            rewardUI.SetActive(true);
+            rewardScreen.SetActive(true);
         }
         else if (GameManager.Instance.state == GameManager.GameState.GAMEOVER)
         {
             nextButton.SetActive(false);
             retryButton.SetActive(true);
-            rewardUI.SetActive(true);
+            rewardScreen.SetActive(true);
         }
         else
         {
-            rewardUI.SetActive(false);
+            rewardScreen.SetActive(false);
         }
     }
 }

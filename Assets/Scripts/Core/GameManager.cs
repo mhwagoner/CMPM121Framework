@@ -36,7 +36,7 @@ public class GameManager
     public EnemySpriteManager enemySpriteManager;
     public PlayerSpriteManager playerSpriteManager;
     public RelicIconManager relicIconManager;
-    public TextMeshProUGUI betweenWaveText;
+    public TextMeshProUGUI rewardScreenText;
 
     private List<GameObject> enemies;
     public int enemy_count { get { return enemies.Count; } }
@@ -78,7 +78,7 @@ public class GameManager
 
     public void UpdateText(string newText)
     {
-        betweenWaveText.text = newText;
+        rewardScreenText.text = newText;
     }
 
     public void UpdateText(TextMeshProUGUI UItext, string newText)
@@ -88,6 +88,7 @@ public class GameManager
 
     public void WaveWon(int currentWave)
     {
+        GameManager.Instance.state = GameManager.GameState.WAVEEND;
         UpdateText( 
         "Wave " + currentWave + " Stats\n" +
         "=+=+=+=+=+=+=\n" + 
