@@ -39,6 +39,9 @@ public class EnemySpawner : MonoBehaviour
             level_button.GetComponent<MenuSelectorController>().spawner = this;
             level_button.GetComponent<MenuSelectorController>().SetLevel(lvl.Key);
         }
+        
+        //get spawnpoints
+        SpawnPoints = GetComponentsInChildren<SpawnPoint>();
     }
 
     // Update is called once per frame
