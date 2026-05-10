@@ -20,21 +20,27 @@ public class Spell
     protected Damage.Type damage_type = Damage.Type.ARCANE;
     protected Projectile projectile = new Projectile();
     protected Dictionary<string, int> attributeDictionary = new Dictionary<string, int>();
+    protected List<ValueModifier> valueModifiers;
 
     public virtual void SetAttributes(JToken attributes)
     {
         attributeDictionary["power"] = 1; // placeholder
         attributeDictionary["wave"] = 1; // placeholder
 
-        name = attributes.SelectToken("name").Value<string>();
-        mana_cost = attributes.SelectToken("mana_cost").Value<string>();
-        damage = attributes.SelectToken("damage.amount").Value<string>();
-        damage_type = Damage.TypeFromString(attributes.SelectToken("damage.type").Value<string>());
-        cooldown = attributes.SelectToken("cooldown").Value<string>();
-        icon = attributes.SelectToken("icon").Value<int>();
-        description = attributes.SelectToken("description").Value<string>();
-
-        projectile = attributes.SelectToken("projectile").ToObject<Projectile>();
+        name = (string)(attributes["name"] ?? "");
+        mana_cost = (string)(attributes["mana_cost"] ?? "1");
+        if (attributes["damage"] != null)
+        {
+            damage = (string)(attributes["damage"]["amount"] ?? "1");
+            damage_type = Damage.TypeFromString((string)(attributes["damage"]["type"] ?? "arcane"));
+        }
+        cooldown = (string)(attributes["cooldown"] ?? "3");
+        icon = (int) (attributes["icon"] ?? 0);
+        description = (string)(attributes["description"] ?? "");
+        if (attributes["projectile"] != null)
+        {
+            projectile = attributes["projectile"].ToObject<Projectile>();
+        }
         return;
     }
 
@@ -78,20 +84,25 @@ public class Spell
         return (last_cast + GetCooldown() < Time.time);
     }
 
+    public virtual IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers)
+    {
+        valueModifiers = modifiers;
+
+        this.team = team;
+        GameManager.Instance.projectileManager.CreateProjectile(projectile.sprite, ValueModifier.ApplyValueModifiers(projectile.trajectory, "trajectory", valueModifiers), where, target - where, RPNEvaluator.RPNEvaluator.Evaluatef(ValueModifier.ApplyValueModifiers(projectile.speed, "speed", valueModifiers), attributeDictionary), OnHit);
+        yield return new WaitForEndOfFrame();
+    }
+
     public virtual IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team)
     {
-        var spelltext = Resources.Load<TextAsset>("spells");
-        SetAttributes(JObject.Parse(spelltext.text)["arcane_bolt"]);
-        this.team = team;
-        GameManager.Instance.projectileManager.CreateProjectile(0, projectile.trajectory, where, target - where, 15f, OnHit);
-        yield return new WaitForEndOfFrame();
+        yield return Cast(where, target, team, new List<ValueModifier>());
     }
 
     protected virtual void OnHit(Hittable other, Vector3 impact)
     {
         if (other.team != team)
         {
-            other.Damage(new Damage(GetDamage(), GetDamageType()));
+            other.Damage(new Damage((int)RPNEvaluator.RPNEvaluator.Evaluatef(ValueModifier.ApplyValueModifiers(damage, "damage", valueModifiers), attributeDictionary), GetDamageType()));
         }
 
     }
@@ -101,14 +112,41 @@ public class ValueModifier
 {
     public string value = "";
     public string type = "";
+    public string behavior = "add";
+
+    public ValueModifier(string value, string type, string behavior)
+    {
+        this.value = value;
+        this.type = type;
+        this.behavior = behavior;
+    }
 
     public static string ApplyValueModifiers(string value, string type, List<ValueModifier> modifiers)
     {
+        // Modifier list is empty
+        if(modifiers == null)
+        {
+            return "";
+        }
+
         foreach(ValueModifier modifier in modifiers)
         {
             if (type == modifier.type)
             {
-                value += modifier.value;
+                switch(modifier.behavior)
+                {
+                    case "add":
+                        value += (" " + modifier.value + " +");
+                        break;
+
+                    case "multiply":
+                        value += (" " + modifier.value + " *");
+                        break;
+
+                    case "replace":
+                        value = modifier.value;
+                        break;
+                }
             }
         }
 
@@ -119,9 +157,31 @@ public class ValueModifier
 public class ModifierSpell : Spell
 {
     public Spell baseSpell;
-    public List<ValueModifier> modifiers; // To be passed via the cast method
+    public List<ValueModifier> modifiers;
 
     public ModifierSpell(SpellCaster owner) : base(owner) { }
+
+    public override void SetAttributes(JToken attributes)
+    {
+        base.SetAttributes(attributes);
+        modifiers = new List<ValueModifier>();
+
+        if (attributes["damage_adder"] != null) { modifiers.Add(new ValueModifier((string)attributes["damage_adder"], "damage", "add")); }
+        if (attributes["damage_multiplier"] != null) { modifiers.Add(new ValueModifier((string)attributes["damage_multiplier"], "damage", "multiply")); }
+
+        if (attributes["mana_adder"] != null) { modifiers.Add(new ValueModifier((string)attributes["mana_adder"], "mana", "add")); }
+        if (attributes["mana_multiplier"] != null) { modifiers.Add(new ValueModifier((string)attributes["mana_multiplier"], "mana", "multiply")); }
+
+        if (attributes["cooldown_adder"] != null) { modifiers.Add(new ValueModifier((string)attributes["cooldown_adder"], "cooldown", "add")); }
+        if (attributes["cooldown_multiplier"] != null) { modifiers.Add(new ValueModifier((string)attributes["cooldown_multiplier"], "cooldown", "multiply")); }
+
+        if (attributes["speed_adder"] != null) { modifiers.Add(new ValueModifier((string)attributes["speed_adder"], "speed", "add")); }
+        if (attributes["speed_multiplier"] != null) { modifiers.Add(new ValueModifier((string)attributes["speed_multiplier"], "speed", "multiply")); }
+
+        if (attributes["projectile_trajectory"] != null) { modifiers.Add(new ValueModifier((string)attributes["projectile_trajectory"], "trajectory", "replace")); }
+
+        return;
+    }
 
     public override int GetManaCost()
     {
@@ -148,9 +208,15 @@ public class ModifierSpell : Spell
         return baseSpell.GetIcon();
     }
 
-    public override IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team)
+    public override IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers)
     {
-        return baseSpell.Cast(where, target, team);
+        // See if modifiers need to be added
+        if (this.modifiers != null)
+        {
+            modifiers.AddRange(this.modifiers);
+        }
+
+        return baseSpell.Cast(where, target, team, modifiers);
     }
 }
 
