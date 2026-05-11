@@ -67,15 +67,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("You Lost");
         //update text to say player loses
-        GameManager.Instance.UpdateText(waveStatsText, 
-        "You Freaking Lost Bro!!!\n" +
-        "=+=+=+=+=+=+=\n" + 
-        "Total Seconds Taken: " + "temp" + "\n" +
-        "Total Damage Dealt: " + "A lot" + "\n" +
-        "Total Spells Used: " + "Many" + "\n" +
-        "Total Enemies Killed: " + "Many"
-        );
-        GameManager.Instance.state = GameManager.GameState.GAMEOVER; 
+        GameManager.Instance.LevelLost();
     }
 
 }

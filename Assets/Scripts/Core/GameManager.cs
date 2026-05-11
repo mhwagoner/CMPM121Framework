@@ -14,6 +14,7 @@ public class GameManager
         PREGAME,
         INWAVE,
         WAVEEND,
+        REWARDS,
         COUNTDOWN,
         GAMEOVER
     }
@@ -114,7 +115,21 @@ public class GameManager
         "Total Spells Used: " + totalSpellsCasted + "\n" +
         "Total Enemies Killed: " + totalEnemiesRemoved
         );
-        state = GameState.GAMEOVER; 
+        state = GameState.GAMEOVER;
+    }
+
+    public void LevelLost()
+    {
+        //update text to say player loses
+        UpdateText(
+        "You Freaking Lost Bro!!!\n" +
+        "=+=+=+=+=+=+=\n" + 
+        "Total Seconds Elapsed: " + Mathf.Round(totalWaveTime) + "\n" +
+        "Total Damage Dealt: " + "A lot" + "\n" +
+        "Total Spells Used: " + totalSpellsCasted + "\n" +
+        "Total Enemies Killed: " + totalEnemiesRemoved
+        );
+        state = GameState.GAMEOVER;
     }
 
     public void ResetGame()

@@ -72,10 +72,14 @@ public class EnemySpawner : MonoBehaviour
         {
             //player won
             GameManager.Instance.LevelWon();
-        } else
+        } else if (GameManager.Instance.state == GameManager.GameState.REWARDS)
         {
             currentWave += 1;
             StartCoroutine(SpawnWave());
+        } else
+        {
+            //advance UI to reward pickup
+            GameManager.Instance.state = GameManager.GameState.REWARDS;
         }
     }
 
