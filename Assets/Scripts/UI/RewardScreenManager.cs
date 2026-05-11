@@ -7,7 +7,7 @@ public class RewardScreenManager : MonoBehaviour
     private TextMeshProUGUI rewardScreenText;
     private GameObject nextButton;
     private GameObject retryButton;
-    private GameObject dropButton;
+    public GameObject[] dropButtons;
     private GameObject takeButton;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -16,7 +16,7 @@ public class RewardScreenManager : MonoBehaviour
         nextButton = rewardScreen.transform.Find("NextButton").gameObject;
         retryButton = rewardScreen.transform.Find("RetryButton").gameObject;
         takeButton = rewardScreen.transform.Find("TakeButton").gameObject;
-        dropButton = rewardScreen.transform.Find("DropButton").gameObject;
+        //dropButtons
         rewardScreenText = rewardScreen.transform.Find("RewardScreenText").gameObject.GetComponent<TextMeshProUGUI>();
         GameManager.Instance.rewardScreenText = rewardScreenText;
         rewardScreen.SetActive(false);
@@ -33,7 +33,10 @@ public class RewardScreenManager : MonoBehaviour
             //if player has less than 4 spells:
             //takeButton.SetActive(true);
             //if player has 4 spells:
-            //dropButton.SetActive(true);
+            /*foreach (GameObject button in dropButtons)
+            {
+                button.SetActive(false);
+            }*/
             rewardScreen.SetActive(true);
         }
         else if (GameManager.Instance.state == GameManager.GameState.WAVEEND) //stats screen
@@ -41,7 +44,10 @@ public class RewardScreenManager : MonoBehaviour
             nextButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next";
             nextButton.SetActive(true);
             retryButton.SetActive(false);
-            dropButton.SetActive(false);
+            foreach (GameObject button in dropButtons)
+            {
+                button.SetActive(false);
+            }
             takeButton.SetActive(false);
             rewardScreen.SetActive(true);
         }
@@ -49,7 +55,10 @@ public class RewardScreenManager : MonoBehaviour
         {
             nextButton.SetActive(false);
             retryButton.SetActive(true);
-            dropButton.SetActive(false);
+            foreach (GameObject button in dropButtons)
+            {
+                button.SetActive(false);
+            }
             takeButton.SetActive(false);
             rewardScreen.SetActive(true);
         }

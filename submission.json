@@ -1,9 +1,5 @@
 {
    "team": [
-             {"firstname": "Alina",
-              "lastname": "Stasi",
-              "github": "me333e",
-              "email": "astasi@ucsc.edu"},
               {"firstname": "Zachary",
               "lastname": "Rocco",
               "github": "Mario-2",
@@ -14,5 +10,5 @@
               "email": "mhwagone@ucsc.edu"}
             ],
    "repository": "git@github.com:mhwagoner/CMPM121Framework.git",
-   "commit": "7970f7ff4cad6f6979184b8b07e27f994695ae69"
+   "commit": "temp"
 }
