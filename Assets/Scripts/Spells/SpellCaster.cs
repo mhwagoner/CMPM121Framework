@@ -7,6 +7,7 @@ public class SpellCaster
     public int mana;
     public int max_mana;
     public int mana_reg;
+    public int spell_power = 5;
     public Hittable.Team team;
     public Spell spell;
 

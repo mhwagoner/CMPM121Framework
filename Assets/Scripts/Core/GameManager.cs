@@ -47,6 +47,7 @@ public class GameManager
     private int waveEnemiesRemoved = 0;
     public int totalSpellsCasted = 0;
     public int waveSpellsCasted = 0;
+    public int currentWave = 0; // needs to be accessable by Spells
 
     public void AddEnemy(GameObject enemy)
     {
@@ -102,6 +103,10 @@ public class GameManager
         waveSpellsCasted = 0;
         totalWaveTime += waveTime;
         waveEnemiesRemoved = 0;
+        this.currentWave = currentWave;
+
+        // Level up player stats
+        GameManager.Instance.player.GetComponent<PlayerController>().WaveWon();
     }
 
     public void LevelWon()

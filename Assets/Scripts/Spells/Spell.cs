@@ -24,8 +24,8 @@ public class Spell
 
     public virtual void SetAttributes(JToken attributes)
     {
-        attributeDictionary["power"] = 1; // placeholder
-        attributeDictionary["wave"] = 1; // placeholder
+        attributeDictionary["wave"] = GameManager.Instance.currentWave;
+        attributeDictionary["power"] = owner.spell_power;
 
         name = (string)(attributes["name"] ?? "");
         mana_cost = (string)(attributes["mana_cost"] ?? "1");
@@ -86,7 +86,9 @@ public class Spell
 
     public virtual IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers)
     {
-        valueModifiers = modifiers;
+        attributeDictionary["wave"] = GameManager.Instance.currentWave;
+        attributeDictionary["power"] = owner.spell_power;
+        valueModifiers = modifiers; // save value modifiers
 
         this.team = team;
         GameManager.Instance.projectileManager.CreateProjectile(projectile.sprite, ValueModifier.ApplyValueModifiers(projectile.trajectory, "trajectory", valueModifiers), where, target - where, RPNEvaluator.RPNEvaluator.Evaluatef(ValueModifier.ApplyValueModifiers(projectile.speed, "speed", valueModifiers), attributeDictionary), OnHit);

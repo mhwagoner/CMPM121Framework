@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour
     public SpellCaster spellcaster;
     public SpellUI spellui;
 
+    public string hpmax = "95 wave 5 * +";
+    public string manamax = "90 wave 10 * +";
+    public string manaRegeneration = "wave 10 +";
+    public string spellPower = "wave 10 *";
     public int speed;
 
     public Unit unit;
@@ -40,6 +44,17 @@ public class PlayerController : MonoBehaviour
         healthui.SetHealth(hp);
         manaui.SetSpellCaster(spellcaster);
         spellui.SetSpell(spellcaster.spell);
+    }
+
+    public void WaveWon()
+    {
+        Dictionary<string, int> attributeDictionary = new Dictionary<string, int>();
+        attributeDictionary["wave"] = GameManager.Instance.currentWave;
+
+        hp.SetMaxHP(RPNEvaluator.RPNEvaluator.Evaluate(hpmax, attributeDictionary));
+        spellcaster.max_mana = RPNEvaluator.RPNEvaluator.Evaluate(manamax, attributeDictionary);
+        spellcaster.mana_reg = RPNEvaluator.RPNEvaluator.Evaluate(manaRegeneration, attributeDictionary);
+        spellcaster.spell_power = RPNEvaluator.RPNEvaluator.Evaluate(spellPower, attributeDictionary);
     }
 
     // Update is called once per frame
