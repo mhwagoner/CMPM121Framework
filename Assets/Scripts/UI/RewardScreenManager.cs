@@ -25,28 +25,32 @@ public class RewardScreenManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.state == GameManager.GameState.REWARDS)
+        if (GameManager.Instance.state == GameManager.GameState.REWARDS) //
         {
-            retryButton.SetActive(false);
-            nextButton.GetComponentInChildren<TextMeshPro>().text = "Next Wave";
+            nextButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Wave";
             nextButton.SetActive(true);
+            retryButton.SetActive(false);
             //if player has less than 4 spells:
             //takeButton.SetActive(true);
             //if player has 4 spells:
             //dropButton.SetActive(true);
             rewardScreen.SetActive(true);
         }
-        else if (GameManager.Instance.state == GameManager.GameState.WAVEEND)
+        else if (GameManager.Instance.state == GameManager.GameState.WAVEEND) //stats screen
         {
-            retryButton.SetActive(false);
-            nextButton.GetComponentInChildren<TextMeshPro>().text = "Next";
+            nextButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next";
             nextButton.SetActive(true);
+            retryButton.SetActive(false);
+            dropButton.SetActive(false);
+            takeButton.SetActive(false);
             rewardScreen.SetActive(true);
         }
-        else if (GameManager.Instance.state == GameManager.GameState.GAMEOVER)
+        else if (GameManager.Instance.state == GameManager.GameState.GAMEOVER) //game end screen
         {
             nextButton.SetActive(false);
             retryButton.SetActive(true);
+            dropButton.SetActive(false);
+            takeButton.SetActive(false);
             rewardScreen.SetActive(true);
         }
         else
