@@ -140,13 +140,11 @@ public class EnemySpawner : MonoBehaviour
                         currentCount += 1;
                         SpawnEnemy(spawn_type, spawn_point);
                     }
-                    goto EndSpawning;
                 }
 
                 yield return new WaitForSeconds(spawn_delay);
             }
         }
-        EndSpawning:
 
         enemy_coroutines_finished++; // communicate that this spawn coroutine has finished
     }
