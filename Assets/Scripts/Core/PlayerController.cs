@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     public ManaBar manaui;
 
     public SpellCaster spellcaster;
-    public SpellUI spellui;
+    public SpellUI spell1ui;
 
     public string hpmax = "95 wave 5 * +";
     public string manamax = "90 wave 10 * +";
@@ -43,10 +43,10 @@ public class PlayerController : MonoBehaviour
         // tell UI elements what to show
         healthui.SetHealth(hp);
         manaui.SetSpellCaster(spellcaster);
-        spellui.SetSpell(spellcaster.spell);
+        spell1ui.SetSpell(spellcaster.spells[0]);
     }
 
-    public void WaveWon()
+    public void UpdatePlayerStats()
     {
         Dictionary<string, int> attributeDictionary = new Dictionary<string, int>();
         attributeDictionary["wave"] = GameManager.Instance.currentWave;

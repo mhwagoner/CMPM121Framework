@@ -79,7 +79,7 @@ public class EnemySpawner : MonoBehaviour
         } else
         {
             //advance UI to reward pickup
-            GameManager.Instance.state = GameManager.GameState.REWARDS;
+            GameManager.Instance.Rewards();
         }
     }
 

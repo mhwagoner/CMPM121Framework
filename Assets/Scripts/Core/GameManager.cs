@@ -90,7 +90,7 @@ public class GameManager
 
     public void WaveWon(int currentWave)
     {
-        GameManager.Instance.state = GameManager.GameState.WAVEEND;
+        state = GameManager.GameState.WAVEEND;
         UpdateText( 
         "Wave " + currentWave + " Stats\n" +
         "=+=+=+=+=+=+=\n" + 
@@ -106,7 +106,19 @@ public class GameManager
         this.currentWave = currentWave;
 
         // Level up player stats
-        GameManager.Instance.player.GetComponent<PlayerController>().WaveWon();
+        player.GetComponent<PlayerController>().UpdatePlayerStats();
+    }
+
+    public void Rewards()
+    {
+        state = GameState.REWARDS;
+        //UpdateText( 
+        /*"New Spell: " + spellName + "\n" +
+        + mod1 + "\n" +
+        "New Spell: " + spellName + "\n" +
+        "New Spell: " + spellName + "\n" +
+        "=+=+=+=+=+=+=\n"
+        );*/
     }
 
     public void LevelWon()
