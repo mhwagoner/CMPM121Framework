@@ -27,8 +27,10 @@ public class RewardScreenManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.state != GameManager.GameState.REWARDS)
+        if (GameManager.Instance.state != GameManager.GameState.REWARDS) //if not on rewards screen, hide drop buttons and reward spell UI
         {
+            rewardSpellUI.SetActive(false);
+
             foreach (GameObject button in dropButtons)
             {
                 button.SetActive(false);
@@ -39,6 +41,7 @@ public class RewardScreenManager : MonoBehaviour
             nextButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Wave";
             nextButton.SetActive(true);
             retryButton.SetActive(false);
+            rewardSpellUI.SetActive(true);
             //if player has less than 4 spells:
             if (GameManager.Instance.player.GetComponent<PlayerController>().spellcaster.spells.Count < 4)
             {

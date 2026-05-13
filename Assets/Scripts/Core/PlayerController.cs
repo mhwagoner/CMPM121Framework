@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public ManaBar manaui;
 
     public SpellCaster spellcaster;
+    public int maxSpells = 4;
     public List<SpellUI> spellUIs;
 
     public string hpmax = "95 wave 5 * +";
@@ -85,10 +86,13 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.LevelLost();
     }
 
-    private void OnSwitchSpell(InputValue value)
+    void OnSwitchSpell(InputValue value)
     {
         if (GameManager.Instance.state == GameManager.GameState.PREGAME || GameManager.Instance.state == GameManager.GameState.GAMEOVER) return;
         spellcaster.SwitchSpell();
+        Debug.Log("Switched Spell");
+        //highlight spell UI to show which spell is active
+        UpdateSpellUIs();
     }
 
     public void TakeSpell()
@@ -96,7 +100,10 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance.state == GameManager.GameState.REWARDS && GameManager.Instance.rewardSpell != null)
         {
             this.spellcaster.spells.Add(GameManager.Instance.rewardSpell);
+            spellcaster.activeSpell = spellcaster.spells.Count - 1; //equip new spell
+            GameManager.Instance.rewardSpell = null;
             UpdateSpellUIs();
+            GameManager.Instance.enemySpawner.NextWave();
         }
     }
 
@@ -114,6 +121,19 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < spellcaster.spells.Count; i++)
         {
             spellUIs[i].SetSpell(spellcaster.spells[i]);
+            spellUIs[i].gameObject.SetActive(true);
+            if (i == spellcaster.activeSpell)
+            {
+                spellUIs[i].gameObject.transform.Find("highlight").gameObject.SetActive(true);
+            } else
+            {
+                spellUIs[i].gameObject.transform.Find("highlight").gameObject.SetActive(false);
+            }
+        }
+        for (int i = spellcaster.spells.Count; i < spellUIs.Count; i++)
+        {
+            spellUIs[i].gameObject.transform.Find("highlight").gameObject.SetActive(false);
+            spellUIs[i].gameObject.SetActive(false);
         }
     }
 

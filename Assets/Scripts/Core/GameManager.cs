@@ -39,6 +39,7 @@ public class GameManager
     public RelicIconManager relicIconManager;
     public TextMeshProUGUI rewardScreenText;
     public GameObject rewardSpellUI;
+    public EnemySpawner enemySpawner;
 
     private List<GameObject> enemies;
     public int enemy_count { get { return enemies.Count; } }

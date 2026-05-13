@@ -26,6 +26,8 @@ public class EnemySpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        GameManager.Instance.enemySpawner = this;
+        
         //parsing enemy and level types from JSON and putting them in dictionaries
         LoadEnemies();
         LoadLevels();
