@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.LevelLost();
     }
 
-    void OnSwitchSpell(InputValue value)
+    void OnChangeSpell(InputValue value)
     {
         if (GameManager.Instance.state == GameManager.GameState.PREGAME || GameManager.Instance.state == GameManager.GameState.GAMEOVER) return;
         spellcaster.SwitchSpell();
