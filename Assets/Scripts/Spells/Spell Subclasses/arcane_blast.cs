@@ -22,7 +22,7 @@ public class arcane_blast : Spell
         secondary_projectile = attributes["secondary_projectile"].ToObject<Projectile>();
     }
 
-    public override IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers)
+    public override IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers, System.Action<Hittable, Vector3> OnHit)
     {
         attributeDictionary["wave"] = GameManager.Instance.currentWave;
         attributeDictionary["power"] = owner.spell_power;
@@ -34,7 +34,7 @@ public class arcane_blast : Spell
         yield return new WaitForEndOfFrame();
     }
 
-    protected override void OnHit(Hittable other, Vector3 impact)
+    public override void OnHit(Hittable other, Vector3 impact)
     {
         int projectileCount = RPNEvaluator.RPNEvaluator.Evaluate(N, attributeDictionary);
 
