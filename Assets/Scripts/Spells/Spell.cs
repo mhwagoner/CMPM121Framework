@@ -89,7 +89,7 @@ public class Spell
         return (last_cast + GetCooldown() < Time.time);
     }
 
-    public virtual IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers)
+    public virtual IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers, System.Action<Hittable, Vector3> OnHit)
     {
         attributeDictionary["wave"] = GameManager.Instance.currentWave;
         attributeDictionary["power"] = owner.spell_power;
@@ -102,10 +102,10 @@ public class Spell
 
     public virtual IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team)
     {
-        yield return Cast(where, target, team, new List<ValueModifier>());
+        yield return Cast(where, target, team, new List<ValueModifier>(), OnHit);
     }
 
-    protected virtual void OnHit(Hittable other, Vector3 impact)
+    public virtual void OnHit(Hittable other, Vector3 impact)
     {
         if (other.team != team)
         {
@@ -220,7 +220,7 @@ public class ModifierSpell : Spell
         return name + " " + baseSpell.GetFullName();
     }
 
-    public override IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers)
+    public override IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers, System.Action<Hittable, Vector3> OnHit)
     {
         // See if modifiers need to be added
         if (this.modifiers != null)
@@ -228,7 +228,12 @@ public class ModifierSpell : Spell
             modifiers.AddRange(this.modifiers);
         }
 
-        return baseSpell.Cast(where, target, team, modifiers);
+        return baseSpell.Cast(where, target, team, modifiers, OnHit);
+    }
+
+    public override void OnHit(Hittable other, Vector3 impact)
+    {
+        baseSpell.OnHit(other, impact);
     }
 }
 

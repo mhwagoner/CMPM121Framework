@@ -18,7 +18,7 @@ public class arcane_spray : Spell
         spray = (float)attributes["spray"];
     }
 
-    public override IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers)
+    public override IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers, System.Action<Hittable, Vector3> OnHit)
     {
         attributeDictionary["wave"] = GameManager.Instance.currentWave;
         attributeDictionary["power"] = owner.spell_power;
