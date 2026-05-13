@@ -222,6 +222,10 @@ public class ModifierSpell : Spell
 
     public override IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers, System.Action<Hittable, Vector3> OnHit)
     {
+        attributeDictionary["wave"] = GameManager.Instance.currentWave;
+        attributeDictionary["power"] = owner.spell_power;
+        valueModifiers = modifiers; // save value modifiers
+
         // See if modifiers need to be added
         if (this.modifiers != null)
         {

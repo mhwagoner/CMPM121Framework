@@ -40,6 +40,16 @@
             "mana_cost": "15",
             "cooldown": "0.5",
             "projectile": {"trajectory": "straight", "speed": "8", "sprite": 0, "lifetime": "0.1 power 100 / +"}
+        },
+        "air_strike":  {
+            "name": "Air Strike",
+            "description": "A targeted burst of bolts.",
+            "icon": 8,
+            "N": "7 power 25 / +",
+            "damage": {"amount": "3 power 8 / +", "type": "arcane"},
+            "mana_cost": "15",
+            "cooldown": "1.5",
+            "projectile": {"trajectory": "straight", "speed": "20", "sprite": 0, "lifetime": "0.1"}
         }
     },
     "modifier": {
@@ -79,6 +89,31 @@
             "damage_multiplier": "0.75",
             "mana_adder": "10",
             "projectile_trajectory": "homing"
+        },
+        "on_hit_burst": {
+            "name": "exploding",
+            "description": "Spell explodes into smaller bolts on impact; increases mana cost and cooldown.",
+            "N": "4",
+            "secondary_damage": "2 power 10 / +",
+            "mana_multiplier": "1.5",
+            "cooldown_multiplier": "2",
+            "projectile": {"trajectory": "straight", "speed": "20", "sprite": 0, "lifetime": "0.1"}
+        },
+        "scatter_burst": {
+            "name": "scatter-burst",
+            "description": "Spell is cast many times with random spread; greatly reduces damage, and increases mana cost and cooldown.",
+            "max_angle": "30",
+            "mana_multiplier": "2 power 100 / +",
+            "cooldown_multiplier": "2 power 100 / +",
+            "damage_multiplier": "0.5",
+            "delay": "0.15",
+            "N": "5 power 100 / +"
+        },
+        "rapid_fire": {
+            "name": "rapid",
+            "description": "Reduced cooldown and mana cost.",
+            "mana_multiplier": "0.75",
+            "cooldown_multiplier": "0.75"
         }
     }
 
