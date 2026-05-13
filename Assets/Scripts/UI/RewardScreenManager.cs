@@ -9,6 +9,7 @@ public class RewardScreenManager : MonoBehaviour
     private GameObject retryButton;
     public GameObject[] dropButtons;
     private GameObject takeButton;
+    private GameObject rewardSpellUI;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,27 +17,45 @@ public class RewardScreenManager : MonoBehaviour
         nextButton = rewardScreen.transform.Find("NextButton").gameObject;
         retryButton = rewardScreen.transform.Find("RetryButton").gameObject;
         takeButton = rewardScreen.transform.Find("TakeButton").gameObject;
-        //dropButtons
+        rewardSpellUI = rewardScreen.transform.Find("RewardSpell").gameObject;
         rewardScreenText = rewardScreen.transform.Find("RewardScreenText").gameObject.GetComponent<TextMeshProUGUI>();
         GameManager.Instance.rewardScreenText = rewardScreenText;
+        GameManager.Instance.rewardSpellUI = rewardSpellUI;
         rewardScreen.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.state == GameManager.GameState.REWARDS) //
+        if (GameManager.Instance.state != GameManager.GameState.REWARDS)
+        {
+            foreach (GameObject button in dropButtons)
+            {
+                button.SetActive(false);
+            }
+        }
+        if (GameManager.Instance.state == GameManager.GameState.REWARDS) //rewards screen
         {
             nextButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Wave";
             nextButton.SetActive(true);
             retryButton.SetActive(false);
             //if player has less than 4 spells:
-            //takeButton.SetActive(true);
-            //if player has 4 spells:
-            /*foreach (GameObject button in dropButtons)
+            if (GameManager.Instance.player.GetComponent<PlayerController>().spellcaster.spells.Count < 4)
             {
-                button.SetActive(false);
-            }*/
+                takeButton.SetActive(true);
+                foreach (GameObject button in dropButtons)//hide drop buttons
+                {
+                    button.SetActive(false);
+                }
+            } 
+            else if (GameManager.Instance.player.GetComponent<PlayerController>().spellcaster.spells.Count >= 4)
+            {
+                takeButton.SetActive(false);
+                foreach (GameObject button in dropButtons)//show drop buttons
+                {
+                    button.SetActive(true);
+                }
+            }
             rewardScreen.SetActive(true);
         }
         else if (GameManager.Instance.state == GameManager.GameState.WAVEEND) //stats screen
@@ -44,10 +63,6 @@ public class RewardScreenManager : MonoBehaviour
             nextButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next";
             nextButton.SetActive(true);
             retryButton.SetActive(false);
-            foreach (GameObject button in dropButtons)
-            {
-                button.SetActive(false);
-            }
             takeButton.SetActive(false);
             rewardScreen.SetActive(true);
         }
@@ -55,10 +70,6 @@ public class RewardScreenManager : MonoBehaviour
         {
             nextButton.SetActive(false);
             retryButton.SetActive(true);
-            foreach (GameObject button in dropButtons)
-            {
-                button.SetActive(false);
-            }
             takeButton.SetActive(false);
             rewardScreen.SetActive(true);
         }

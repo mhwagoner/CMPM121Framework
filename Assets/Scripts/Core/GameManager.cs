@@ -38,6 +38,7 @@ public class GameManager
     public PlayerSpriteManager playerSpriteManager;
     public RelicIconManager relicIconManager;
     public TextMeshProUGUI rewardScreenText;
+    public GameObject rewardSpellUI;
 
     private List<GameObject> enemies;
     public int enemy_count { get { return enemies.Count; } }
@@ -48,6 +49,7 @@ public class GameManager
     public int totalSpellsCasted = 0;
     public int waveSpellsCasted = 0;
     public int currentWave = 0; // needs to be accessable by Spells
+    public Spell rewardSpell;
 
     public void AddEnemy(GameObject enemy)
     {
@@ -112,13 +114,15 @@ public class GameManager
     public void Rewards()
     {
         state = GameState.REWARDS;
-        //UpdateText( 
-        /*"New Spell: " + spellName + "\n" +
-        + mod1 + "\n" +
-        "New Spell: " + spellName + "\n" +
-        "New Spell: " + spellName + "\n" +
+
+        //generate new spell
+        rewardSpell = new SpellBuilder().Build(player.GetComponent<PlayerController>().spellcaster);
+        rewardSpellUI.GetComponent<SpellUI>().SetSpell(rewardSpell);
+
+        UpdateText( 
+        "New Spell: " + rewardSpell.GetFullName() + "\n" +
         "=+=+=+=+=+=+=\n"
-        );*/
+        );
     }
 
     public void LevelWon()

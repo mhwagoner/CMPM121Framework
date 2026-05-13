@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Collections.Generic;
 using TMPro;
+using System.Xml.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public ManaBar manaui;
 
     public SpellCaster spellcaster;
-    public SpellUI spell1ui;
+    public List<SpellUI> spellUIs;
 
     public string hpmax = "95 wave 5 * +";
     public string manamax = "90 wave 10 * +";
@@ -22,7 +23,6 @@ public class PlayerController : MonoBehaviour
     public int speed;
 
     public Unit unit;
-    public TextMeshProUGUI waveStatsText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
         // tell UI elements what to show
         healthui.SetHealth(hp);
         manaui.SetSpellCaster(spellcaster);
-        spell1ui.SetSpell(spellcaster.spells[0]);
+        spellUIs[0].SetSpell(spellcaster.spells[0]);
     }
 
     public void UpdatePlayerStats()
@@ -83,6 +83,38 @@ public class PlayerController : MonoBehaviour
         Debug.Log("You Lost");
         //update text to say player loses
         GameManager.Instance.LevelLost();
+    }
+
+    private void OnSwitchSpell(InputValue value)
+    {
+        if (GameManager.Instance.state == GameManager.GameState.PREGAME || GameManager.Instance.state == GameManager.GameState.GAMEOVER) return;
+        spellcaster.SwitchSpell();
+    }
+
+    public void TakeSpell()
+    {
+        if (GameManager.Instance.state == GameManager.GameState.REWARDS && GameManager.Instance.rewardSpell != null)
+        {
+            this.spellcaster.spells.Add(GameManager.Instance.rewardSpell);
+            UpdateSpellUIs();
+        }
+    }
+
+    public void DropSpell(int index)//need to get index of spell to drop from button
+    {
+        if (GameManager.Instance.state == GameManager.GameState.REWARDS)
+        {
+            this.spellcaster.spells.RemoveAt(index);
+            UpdateSpellUIs();
+        }
+    }
+
+    public void UpdateSpellUIs()
+    {
+        for (int i = 0; i < spellcaster.spells.Count; i++)
+        {
+            spellUIs[i].SetSpell(spellcaster.spells[i]);
+        }
     }
 
 }
