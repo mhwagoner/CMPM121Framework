@@ -59,6 +59,16 @@ public class Spell
         return name;
     }
 
+    public string GetDescription()
+    {
+        return description;
+    }
+
+    public virtual string GetFullDescription()
+    {
+        return GetDescription();
+    }
+
     public virtual int GetManaCost()
     {
         return (int)RPNEvaluator.RPNEvaluator.Evaluatef(mana_cost, attributeDictionary);
@@ -218,6 +228,11 @@ public class ModifierSpell : Spell
     public override string GetFullName()
     {
         return name + " " + baseSpell.GetFullName();
+    }
+
+    public override string GetFullDescription()
+    {
+        return name + ": " + description + "\n" + baseSpell.GetFullDescription();
     }
 
     public override IEnumerator Cast(Vector3 where, Vector3 target, Hittable.Team team, List<ValueModifier> modifiers, System.Action<Hittable, Vector3> OnHit)

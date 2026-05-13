@@ -122,7 +122,8 @@ public class GameManager
 
         UpdateText( 
         "New Spell: " + rewardSpell.GetFullName() + "\n" +
-        "=+=+=+=+=+=+=\n"
+        "=+=+=+=+=+=+=\n" +
+        rewardSpell.GetFullDescription() + "\n"
         );
     }
 
