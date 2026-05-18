@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public class EventBus 
 {
@@ -19,6 +20,11 @@ public class EventBus
     public void DoDamage(Vector3 where, Damage dmg, Hittable target)
     {
         OnDamage?.Invoke(where, dmg, target);
+    }
+
+    public void OnRelicPickup(Relic relic)
+    {
+        
     }
 
     public void DestroyInstance()
