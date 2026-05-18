@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     public int maxSpells = 4;
     public List<SpellUI> spellUIs;
 
+    public List<Relic> relics;
+
     public string hpmax = "95 wave 5 * +";
     public string manamax = "90 wave 10 * +";
     public string manaRegeneration = "wave 10 +";
